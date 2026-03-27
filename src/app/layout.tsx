@@ -14,6 +14,16 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Ksenyia Sujova — Digital Art Director",
   description: "Official portfolio of Ksenyia Sujova. Art Director and UI/UX Designer.",
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
+  }
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({

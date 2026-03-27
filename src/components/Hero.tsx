@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -8,113 +8,131 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const parallaxRef = useRef<HTMLDivElement>(null);
+  const span1Ref = useRef<HTMLSpanElement>(null);
+  const span2Ref = useRef<HTMLSpanElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      let introTl = gsap.timeline({ paused: true });
-      
-      introTl.to(containerRef.current, { autoAlpha: 1, duration: 0.1 });
-      
-      // Animar texto inicial (Entrada)
-      introTl.fromTo(
-        textRef.current?.children || [],
-        { 
-          y: 100,
-          opacity: 0,
-          skewY: 5
-        },
-        {
-          y: 0,
-          opacity: 1,
-          skewY: 0,
-          duration: 1.2,
-          stagger: 0.2,
-          ease: 'power4.out',
-        }
-      );
+  const overlayRef = useRef<HTMLDivElement>(null);
 
-      // Escuchar al Preloader para arrancar
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // ── 1. INITIAL STATES ──────────────────────────────────────────────────
+      gsap.set(containerRef.current, { autoAlpha: 1 });
+      gsap.set([span1Ref.current, span2Ref.current], { y: 120, opacity: 0, skewY: 6 });
+      gsap.set(subtitleRef.current, { y: 40, opacity: 0 });
+
+      // ── 2. INTRO ANIMATION ─────────────────────────────────────────────────
+      const introTl = gsap.timeline({ paused: true });
+      introTl
+        .to(span1Ref.current, { y: 0, opacity: 1, skewY: 0, duration: 1.4, ease: 'power4.out' })
+        .to(span2Ref.current, { y: 0, opacity: 1, skewY: 0, duration: 1.4, ease: 'power4.out' }, '-=1.1')
+        .to(subtitleRef.current, { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out' }, '-=0.6');
+
       const handlePreloaderDone = () => introTl.play();
       window.addEventListener('preloaderComplete', handlePreloaderDone);
-      
-      // Fallback de seguridad
-      const fallbackTimer = setTimeout(() => introTl.play(), 3000);
+      const fallbackTimer = setTimeout(() => introTl.play(), 1500);
 
-      // Usar ScrollTrigger en la capa principal sin estados de React que rompan el sincronismo.
-      const scrollTl = gsap.timeline({
-        scrollTrigger: {
+      // ── 3. SCROLL ANIMATION ────────────────────────────────────────────────
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+      if (!isMobile) {
+        // Use a minimal inline scroll tracker — avoids Lenis timing issues
+        // by reading the native scrollY that ScrollTrigger already normalizes
+        const scrollTriggerInstance = ScrollTrigger.create({
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=150%', // Reducido para no ser tan largo
+          end: '+=200%',
           pin: true,
-          scrub: 0.5,
+          anticipatePin: 1,
+          scrub: 1.5,
           onUpdate: (self) => {
-             const video = videoRef.current;
-             if (video && video.duration > 0) {
-               // De 0 hasta (duracion - 0.1s para prevenir parones)
-               const targetTime = self.progress * (video.duration - 0.1);
-               video.currentTime = targetTime;
-             }
+            const p = self.progress;
+
+            // Text: phase 0→0.4 — rise and fade out
+            if (span1Ref.current && span2Ref.current) {
+              const textProgress = Math.min(p / 0.4, 1);
+              gsap.set([span1Ref.current, span2Ref.current], {
+                y: textProgress * -180,
+                opacity: 1 - textProgress,
+                scale: 1 - textProgress * 0.1
+              });
+            }
+            if (subtitleRef.current) {
+              const subProgress = Math.min(p / 0.3, 1);
+              gsap.set(subtitleRef.current, {
+                y: subProgress * -80,
+                opacity: 1 - subProgress
+              });
+            }
+
+            // Overlay: phase 0.1→0.6 — fade out (reveal video)
+            if (overlayRef.current) {
+              const overlayProgress = Math.max(0, Math.min((p - 0.1) / 0.5, 1));
+              gsap.set(overlayRef.current, { opacity: 0.5 - overlayProgress * 0.5 });
+            }
+
+            // Video: phase 0.3→1 — slow zoom in
+            if (videoRef.current) {
+              const videoProgress = Math.max(0, Math.min((p - 0.3) / 0.7, 1));
+              gsap.set(videoRef.current, { scale: 1 + videoProgress * 0.1 });
+
+              // Also scrub playback
+              if (videoRef.current.duration > 0) {
+                videoRef.current.currentTime = p * (videoRef.current.duration - 0.1);
+              }
+            }
           }
-        }
-      });
-
-      // Efecto parallax en el texto mientras scrolleas
-      scrollTl.to(textRef.current, {
-        y: -150,
-        opacity: 0,
-        ease: 'none'
-      }, 0);
-
-      // --- KINETIC MOUSE PHYSICS ---
-      let lastX = 0;
-      let timeoutId: NodeJS.Timeout;
-
-      const handleMouseMove = (e: MouseEvent) => {
-        if (!parallaxRef.current) return;
-        
-        const normalizedX = (e.clientX / window.innerWidth) * 2 - 1;
-        const normalizedY = (e.clientY / window.innerHeight) * 2 - 1;
-        
-        // Calculate velocity (delta X)
-        const vX = e.clientX - lastX;
-        lastX = e.clientX;
-
-        // Apply a dampened skew based on velocity
-        const skewAmount = gsap.utils.clamp(-25, 25, vX * -0.5);
-
-        // Apply Parallax and Skew immediately
-        gsap.to(parallaxRef.current, {
-          x: normalizedX * -50,
-          y: normalizedY * -30,
-          skewX: skewAmount,
-          skewY: normalizedX * 2, // Slight tilt
-          duration: 0.5,
-          ease: 'power3.out',
-          overwrite: 'auto'
         });
 
-        // Gracefully return skew to 0 when mouse stops moving
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          gsap.to(parallaxRef.current, {
-            skewX: 0,
-            skewY: 0,
-            duration: 1.2,
-            ease: 'elastic.out(1, 0.3)'
-          });
-        }, 50);
-      };
+        return () => {
+          scrollTriggerInstance.kill();
+        };
+      }
 
-      window.addEventListener('mousemove', handleMouseMove);
+      // ── 4. MOUSE KINETICS (desktop only) ───────────────────────────────────
+      if (!isMobile) {
+        let lastX = 0;
+        let timeoutId: NodeJS.Timeout;
+
+        const handleMouseMove = (e: MouseEvent) => {
+          const nX = (e.clientX / window.innerWidth) * 2 - 1;
+          const nY = (e.clientY / window.innerHeight) * 2 - 1;
+          const vX = e.clientX - lastX;
+          lastX = e.clientX;
+          const skew = gsap.utils.clamp(-20, 20, vX * -0.4);
+
+          gsap.to([span1Ref.current, span2Ref.current], {
+            x: nX * -40,
+            y: nY * -25,
+            skewX: skew,
+            duration: 0.6,
+            ease: 'power3.out',
+            overwrite: 'auto'
+          });
+
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => {
+            gsap.to([span1Ref.current, span2Ref.current], {
+              skewX: 0,
+              duration: 1.4,
+              ease: 'elastic.out(1, 0.3)'
+            });
+          }, 60);
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+          window.removeEventListener('preloaderComplete', handlePreloaderDone);
+          window.removeEventListener('mousemove', handleMouseMove);
+          clearTimeout(fallbackTimer);
+          clearTimeout(timeoutId);
+        };
+      }
 
       return () => {
         window.removeEventListener('preloaderComplete', handlePreloaderDone);
-        window.removeEventListener('mousemove', handleMouseMove);
         clearTimeout(fallbackTimer);
-        clearTimeout(timeoutId);
       };
     }, containerRef);
 
@@ -122,9 +140,9 @@ export default function Hero() {
   }, []);
 
   return (
-    <section 
+    <section
       ref={containerRef}
-      className="hero-section" 
+      className="hero-section"
       aria-labelledby="hero-heading"
       style={{
         height: '100vh',
@@ -133,54 +151,104 @@ export default function Hero() {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
     >
-      <div 
-        className="hero-background-reel" 
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: 0, left: 0, width: '100%', height: '100%',
-          zIndex: -1
-        }}
-      >
+      {/* Video background */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <video
           ref={videoRef}
           src="/hero-video.mp4?v=3"
           muted
           playsInline
           preload="auto"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'translateZ(0)', willChange: 'transform' }}
-        />
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 1, transform: 'translateZ(0)' }} />
-      </div>
-      
-      <div className="hero-content" style={{ textAlign: 'center', mixBlendMode: 'difference' }}>
-        <h1 
-          id="hero-heading" 
-          className="kinetic-text" 
           style={{
-            fontSize: 'clamp(3rem, 10vw, 8rem)',
+            width: '100%', height: '100%',
+            objectFit: 'cover',
+            transformOrigin: 'center center',
+            willChange: 'transform'
+          }}
+        />
+        <div
+          ref={overlayRef}
+          style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1 }}
+        />
+      </div>
+
+      {/* Text content */}
+      <div
+        className="hero-content"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          textAlign: 'center',
+          mixBlendMode: 'difference',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '2rem',
+        }}
+      >
+        <h1
+          id="hero-heading"
+          className="kinetic-text"
+          style={{
+            fontSize: 'clamp(2.5rem, 10vw, 8rem)',
             margin: 0,
+            display: 'flex',
+            gap: 'clamp(0.5rem, 2vw, 2rem)',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
           }}
         >
-          <div 
-            ref={textRef}
-            style={{ 
-              display: 'flex', 
-              gap: '2rem', 
-              justifyContent: 'center', 
-              flexWrap: 'wrap' 
-            }}
-          >
-            {/* Contenedor Parallax Interno para no chocar con el GSAP de Scroll */}
-            <div ref={parallaxRef} style={{ display: 'flex', gap: '2rem' }}>
-              <span style={{ display: 'inline-block' }}>DESIGN.</span>
-              <span style={{ display: 'inline-block' }}>ART.</span>
-            </div>
-          </div>
+          <span ref={span1Ref} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
+            DESIGN.
+          </span>
+          <span ref={span2Ref} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
+            ART.
+          </span>
         </h1>
+
+        <p
+          ref={subtitleRef}
+          style={{
+            fontSize: 'clamp(0.65rem, 1.2vw, 0.9rem)',
+            letterSpacing: '0.3em',
+            textTransform: 'uppercase',
+            color: 'rgba(240, 238, 233, 0.6)',
+            margin: 0,
+            willChange: 'transform, opacity',
+          }}
+        >
+          Digital Art Direction&nbsp;&nbsp;/&nbsp;&nbsp;UI·UX Design&nbsp;&nbsp;/&nbsp;&nbsp;Motion
+        </p>
+      </div>
+
+      {/* Scroll indicator */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          bottom: '2.5rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '0.5rem',
+          opacity: 0.5,
+        }}
+      >
+        <span style={{ fontSize: '0.6rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
+          Scroll
+        </span>
+        <div style={{
+          width: '1px',
+          height: '40px',
+          background: 'linear-gradient(to bottom, var(--text-secondary), transparent)',
+          animation: 'pulse 1.8s ease-in-out infinite',
+        }} />
       </div>
     </section>
   );

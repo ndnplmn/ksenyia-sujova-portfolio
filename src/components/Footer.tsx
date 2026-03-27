@@ -60,7 +60,7 @@ export default function Footer() {
             fontWeight: 900,
           }}
         >
-          Let's<br />talk.
+          Let&apos;s<br />talk.
         </h2>
       </div>
       
@@ -68,7 +68,7 @@ export default function Footer() {
         <form 
           className="minimal-form" 
           aria-label="Contact form" 
-          style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '2rem' }}
+          style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: 0 }}
           onSubmit={(e) => e.preventDefault()}
         >
           <div className="input-group" style={{ position: 'relative' }}>
@@ -166,7 +166,8 @@ export default function Footer() {
             flexDirection: 'column',
             gap: '1rem',
             alignItems: 'flex-end',
-            fontSize: '1.2rem'
+            fontSize: '1.2rem',
+            flexShrink: 0
           }}
         >
           {['Behance', 'Twitter', 'LinkedIn'].map((network, i) => (

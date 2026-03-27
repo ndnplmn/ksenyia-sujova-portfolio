@@ -44,25 +44,25 @@ export default function ExperienceTimeline() {
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let ctx = gsap.context(() => {
+    // On mobile, skip the horizontal scroll experience entirely
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) return;
+
+    const ctx = gsap.context(() => {
       const track = trackRef.current;
       if (!track) return;
 
-      // Pin the section and scroll the track horizontally
-      // Translate it relative to the true scroll width instead of assuming 100vw per slide
       gsap.to(track, {
         x: () => -(track.scrollWidth - window.innerWidth),
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
-          pin: true,           // Clavamos la sección a la pantalla
-          scrub: 1,            // Suavizamos el movimiento de arrastre
-          // Hacemos que el scroll sea mucho más corto visualmente (1.5x más rápido de lo habitual)
+          pin: true,
+          scrub: 1,
           end: () => '+=' + (track.scrollWidth / 1.5) 
         }
       });
       
-      // Animate the progress bar linearly with the scroll
       gsap.to('.progress-fill', {
         width: '100%',
         ease: 'none',
@@ -82,29 +82,18 @@ export default function ExperienceTimeline() {
   return (
     <section 
       ref={sectionRef}
-      id="experience" 
+      id="experience"
+      className="timeline-section"
       style={{ 
         backgroundColor: '#070A0F', 
         color: 'var(--text-primary)',
-        height: '100vh',   // El contenedor debe medir exactamente la pantalla
-        overflow: 'hidden', // Escondemos lo que se desborda horizontalmente
+        height: '100vh',
+        overflow: 'hidden',
         position: 'relative',
         zIndex: 10
       }}
     >
-      <style>{`
-        /* Ajustamos las slides para que en PC se vean al menos 2 a la vez (50vw) y no haya tanto espacio vacío */
-        .timeline-slide {
-          width: 100vw;
-        }
-        @media (min-width: 768px) {
-          .timeline-slide {
-            width: 50vw;
-          }
-        }
-      `}</style>
-      
-      {/* Título superior fijo */}
+      {/* Fixed section title */}
       <h2 
         style={{ 
           position: 'absolute', 
@@ -121,17 +110,17 @@ export default function ExperienceTimeline() {
         THE STORY / TIMELINE
       </h2>
 
-      {/* Track que se desliza horizontalmente */}
+      {/* Horizontal scrolling track */}
       <div 
         ref={trackRef}
         className="horizontal-track"
         style={{ 
           display: 'flex', 
-          width: 'fit-content', // Crece en función de los slides internos
+          width: 'fit-content',
           height: '100%',
-          paddingLeft: '10vw', // Espacio inicial
-          paddingRight: '10vw', // Espacio final de rebote decorativo
-          willChange: 'transform' // Optimización estricta para GSAP
+          paddingLeft: '10vw',
+          paddingRight: '10vw',
+          willChange: 'transform'
         }}
       >
         {experiences.map((exp, index) => (
@@ -139,6 +128,7 @@ export default function ExperienceTimeline() {
             key={index} 
             className="timeline-slide"
             style={{ 
+              width: '50vw',
               height: '100%', 
               position: 'relative',
               display: 'flex',
@@ -147,7 +137,7 @@ export default function ExperienceTimeline() {
               flexShrink: 0
             }}
           >
-            {/* Año Gigante (Stroke-only layout para el fondo) */}
+            {/* Giant year background */}
             <div 
               className="huge-year"
               style={{
@@ -167,14 +157,13 @@ export default function ExperienceTimeline() {
               {exp.year.split('—')[0]}
             </div>
 
-            {/* Caja de contenido (Rol + Descripción) */}
+            {/* Content card */}
             <div 
               className="content-box"
               style={{
                 width: '80%',
                 maxWidth: '600px',
                 zIndex: 2,
-                mixBlendMode: 'difference' // Alto contraste dinámico al pasar sobre arte o líneas
               }}
             >
               <div 
@@ -195,7 +184,7 @@ export default function ExperienceTimeline() {
                   <span style={{ color: 'var(--text-secondary)', fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)', letterSpacing: '0.1em' }}>@ {exp.company}</span>
                 </h3>
               </div>
-              <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: 'var(--text-secondary)', maxWidth: '450px' }}>
+              <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: 'var(--text-secondary)', maxWidth: '450px', margin: 0 }}>
                 {exp.description}
               </p>
             </div>
@@ -203,7 +192,7 @@ export default function ExperienceTimeline() {
         ))}
       </div>
       
-      {/* Barra de progreso / Línea temporal visual en el footer del slider */}
+      {/* Progress bar (desktop only) */}
       <div 
         style={{
           position: 'absolute',

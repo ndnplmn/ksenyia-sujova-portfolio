@@ -198,7 +198,7 @@ export default function Header() {
             gap: '2vh'
           }}
         >
-          {navLinks.map((link, index) => (
+          {navLinks.map((link) => (
             <li key={link.name} style={{ overflow: 'hidden' }}>
               <a 
                 href={link.href}

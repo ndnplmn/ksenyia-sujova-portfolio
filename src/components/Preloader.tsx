@@ -3,14 +3,6 @@
 import { useEffect, useState, useRef } from 'react';
 import gsap from 'gsap';
 
-const imageUrls = [
-  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200',
-  'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1200',
-  'https://images.unsplash.com/photo-1618005191263-d731885b525f?q=80&w=1200'
-];
-
-const videoUrl = '/hero-video.mp4?v=3';
-
 export default function Preloader() {
   const [progress, setProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -21,11 +13,6 @@ export default function Preloader() {
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    let loadedCount = 0;
-    const totalAssets = imageUrls.length + 1;
-    let isFinished = false;
-
-    // Radius considerations for the SVG circle
     const radius = 60;
     const circumference = 2 * Math.PI * radius;
     if (circleRef.current) {
@@ -33,138 +20,143 @@ export default function Preloader() {
       circleRef.current.style.strokeDashoffset = `${circumference}`;
     }
 
-    const updateProgress = () => {
-      if (isFinished) return;
-      loadedCount++;
-      const percent = Math.floor((loadedCount / totalAssets) * 100);
-      setProgress(percent);
+    // Duration of the preloader animation in ms
+    const DURATION = 2000;
+    const startTime = Date.now();
+    let animFrame: number;
 
-      // Animar el círculo de progreso
+    const tick = () => {
+      const elapsed = Date.now() - startTime;
+      const pct = Math.min(Math.floor((elapsed / DURATION) * 100), 100);
+      setProgress(pct);
+
       if (circleRef.current) {
-        const offset = circumference - (percent / 100) * circumference;
-        gsap.to(circleRef.current, { strokeDashoffset: offset, duration: 0.3, ease: 'power2.out' });
+        const offset = circumference - (pct / 100) * circumference;
+        circleRef.current.style.strokeDashoffset = `${offset}`;
       }
 
-      if (loadedCount === totalAssets) {
-        isFinished = true;
-        setTimeout(() => {
-          hidePreloader();
-        }, 500);
+      if (pct < 100) {
+        animFrame = requestAnimationFrame(tick);
+      } else {
+        // Small pause at 100% before exiting
+        setTimeout(hidePreloader, 400);
       }
     };
 
-    imageUrls.forEach(url => {
-      const img = new Image();
-      img.src = url;
-      img.onload = updateProgress;
-      img.onerror = updateProgress;
-    });
-
-    const video = document.createElement('video');
-    video.src = videoUrl;
-    video.preload = 'auto';
-    video.load();
-    video.oncanplaythrough = updateProgress;
-    video.onerror = updateProgress;
-    if (video.readyState >= 3) {
-      updateProgress();
-    } else {
-       setTimeout(() => {
-         if (!isFinished) {
-           loadedCount = totalAssets - 1;
-           updateProgress();
-         }
-       }, 8000);
-    }
+    animFrame = requestAnimationFrame(tick);
 
     function hidePreloader() {
-      const ctx = gsap.context(() => {
-        const tl = gsap.timeline({
-          onComplete: () => {
-            document.documentElement.style.overflow = '';
-            document.body.style.overflow = '';
-            if (containerRef.current) containerRef.current.style.display = 'none';
-            window.dispatchEvent(new Event('preloaderComplete'));
-          }
-        });
+      if (!containerRef.current) {
+        cleanup();
+        return;
+      }
 
-        // 1. Shrink tracking circle and text
-        tl.to(contentRef.current, {
-          scale: 0.5,
+      const tl = gsap.timeline({ onComplete: cleanup });
+
+      tl.to(contentRef.current, {
+        scale: 0.85,
+        opacity: 0,
+        duration: 0.4,
+        ease: 'power3.in',
+      }).to(
+        containerRef.current,
+        {
           opacity: 0,
-          duration: 0.6,
-          ease: 'power3.in'
-        })
-        // 2. The Aperture Reveal! The black background shrinks into a tiny hole and disappears
-        .to(containerRef.current, {
-          clipPath: 'circle(0% at 50% 50%)',
-          duration: 1.2,
-          ease: 'expo.inOut'
-        });
-      });
-      return () => ctx.revert();
+          duration: 0.5,
+          ease: 'power2.inOut',
+        },
+        '-=0.1'
+      );
     }
+
+    function cleanup() {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      if (containerRef.current) {
+        containerRef.current.style.display = 'none';
+      }
+      window.dispatchEvent(new Event('preloaderComplete'));
+    }
+
+    return () => {
+      cancelAnimationFrame(animFrame);
+    };
   }, []);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       style={{
         position: 'fixed',
         inset: 0,
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
         backgroundColor: '#070A0F',
         zIndex: 99999,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        clipPath: 'circle(150% at 50% 50%)' // Starts fully covering the screen
       }}
     >
-      <div 
+      {/* Progress ring */}
+      <div
         ref={contentRef}
         style={{
           position: 'relative',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '200px',
-          height: '200px'
+          width: '160px',
+          height: '160px',
         }}
       >
-        <svg 
-          width="200" 
-          height="200" 
-          viewBox="0 0 200 200" 
+        <svg
+          width="160"
+          height="160"
+          viewBox="0 0 200 200"
           style={{ position: 'absolute', top: 0, left: 0, transform: 'rotate(-90deg)' }}
         >
-          <circle 
-            cx="100" cy="100" r="60" 
-            fill="transparent" 
-            stroke="var(--surface-secondary)" 
-            strokeWidth="1" 
+          <circle
+            cx="100"
+            cy="100"
+            r="60"
+            fill="transparent"
+            stroke="var(--surface-secondary)"
+            strokeWidth="1"
           />
-          <circle 
+          <circle
             ref={circleRef}
-            cx="100" cy="100" r="60" 
-            fill="transparent" 
-            stroke="var(--accent-lime)" 
-            strokeWidth="2" 
+            cx="100"
+            cy="100"
+            r="60"
+            fill="transparent"
+            stroke="var(--accent-lime)"
+            strokeWidth="2"
             strokeLinecap="round"
-            style={{ 
-              transition: 'stroke-dashoffset 0.1s linear' // managed by GSAP mainly, but fallback
-            }}
           />
         </svg>
 
-        <div className="kinetic-text" style={{ fontSize: '2rem', color: 'var(--text-primary)', textAlign: 'center' }}>
+        <div
+          className="kinetic-text"
+          style={{ fontSize: '1.8rem', color: 'var(--text-primary)', textAlign: 'center' }}
+        >
           {progress.toString().padStart(3, '0')}
         </div>
       </div>
 
-      <div style={{ position: 'absolute', bottom: '10%', fontSize: '0.8rem', color: 'var(--text-secondary)', letterSpacing: '0.3em', textTransform: 'uppercase' }}>
+      {/* Brand name */}
+      <div
+        className="preloader-name"
+        style={{
+          position: 'absolute',
+          bottom: '10%',
+          fontSize: '0.8rem',
+          color: 'var(--text-secondary)',
+          letterSpacing: '0.3em',
+          textTransform: 'uppercase',
+        }}
+      >
         Ksenyia Sujova
       </div>
     </div>

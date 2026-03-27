@@ -33,8 +33,8 @@ export default function CustomCursor() {
     const xRingSet = gsap.quickSetter(ring, "x", "px");
     const yRingSet = gsap.quickSetter(ring, "y", "px");
 
-    let mouse = { x: -100, y: -100 }; // Inicializado fuera de la pantalla
-    let ringPos = { x: -100, y: -100 };
+    const mouse = { x: -100, y: -100 }; // Inicializado fuera de la pantalla
+    const ringPos = { x: -100, y: -100 };
 
     const onMouseMove = (e: MouseEvent) => {
       mouse.x = e.clientX;
@@ -117,9 +117,10 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Anillo de Arrastre Secundario (Suave y Elástico) */}
+      {/* Trailing Ring */}
       <div 
         ref={ringRef}
+        className="custom-cursor-ring"
         style={{
           position: 'fixed',
           top: '-20px',  // Al poner -20 y -20 en top/left, el x=0, y=0 literal centrará el div en el ratón.
@@ -153,9 +154,10 @@ export default function CustomCursor() {
         </div>
       </div>
       
-      {/* Punto de Rastreo Principal (0 frame latencia) */}
+      {/* Main tracking dot */}
       <div 
         ref={dotRef}
+        className="custom-cursor-dot"
         style={{
           position: 'fixed',
           top: '-3px', // Mitad del alto

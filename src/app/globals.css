@@ -63,6 +63,12 @@ a {
   line-height: 1;
 }
 
+/* Scroll indicator pulse */
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(0.7); }
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -97,3 +103,131 @@ a {
   background-color: rgba(182, 255, 59, 0.2);
   border: 1px solid var(--accent-lime);
 }
+
+/* ============================================
+   MOBILE RESPONSIVENESS
+   ============================================ */
+
+/* Tablet (≤ 1024px) */
+@media (max-width: 1024px) {
+  .site-header {
+    padding: 1.5rem 5% !important;
+  }
+
+  /* Portfolio: 2 columns on tablet */
+  .portfolio-grid-wrapper {
+    flex-wrap: wrap !important;
+  }
+  .portfolio-col {
+    width: 48% !important;
+  }
+  .portfolio-col:last-child {
+    display: none; /* Hide 3rd column on tablet */
+  }
+}
+
+/* Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  /* Hide custom cursor on touch devices */
+  .custom-cursor-dot,
+  .custom-cursor-ring {
+    display: none !important;
+  }
+
+  body, * {
+    cursor: auto !important;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    padding: 1.2rem 5% !important;
+  }
+
+  /* ── HERO ── */
+  .hero-section {
+    height: 100svh !important;
+    height: 100dvh !important; /* Dynamic viewport height — handles iOS safari chrome */
+    min-height: -webkit-fill-available;
+  }
+
+  /* ── PORTFOLIO GRID ── */
+  .portfolio-grid-wrapper {
+    flex-direction: column !important;
+    gap: 4vw !important;
+  }
+  .portfolio-col {
+    width: 100% !important;
+    margin-top: 0 !important; /* Reset the offset on mobile */
+  }
+  .portfolio-col:last-child {
+    display: flex !important;
+  }
+
+  /* ── EXPERIENCE TIMELINE ── */
+  .timeline-section {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .horizontal-track {
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: 0 5vw !important;
+    transform: none !important; /* Cancel GSAP horizontal transform on mobile */
+  }
+  .timeline-slide {
+    width: 100% !important;
+    height: auto !important;
+    padding: 10vw 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: relative !important;
+  }
+  .timeline-slide:last-child {
+    border-bottom: none;
+  }
+  .huge-year {
+    font-size: 25vw !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin-bottom: 1rem;
+    display: block;
+    text-align: left;
+  }
+  .content-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    mix-blend-mode: normal !important; /* Avoid blend mode bugs on mobile */
+    position: relative !important;
+    z-index: 2;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    padding: 15vw 5% !important;
+  }
+  .footer-social {
+    align-items: flex-start !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 1.5rem !important;
+    width: 100%;
+  }
+
+  /* ── PRELOADER ── */
+  .preloader-name {
+    font-size: 0.7rem !important;
+  }
+}
+
+/* Extra small (≤ 430px — iPhone Pro Max) */
+@media (max-width: 430px) {
+  .site-header {
+    padding: 1rem 4% !important;
+  }
+
+  .footer-cta h2 {
+    font-size: clamp(3rem, 22vw, 8rem) !important;
+  }
+}
+
