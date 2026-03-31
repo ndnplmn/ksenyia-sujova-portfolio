@@ -140,6 +140,7 @@ export default function ExperienceTimeline() {
             {/* Giant year background */}
             <div 
               className="huge-year"
+              data-magnetic-target
               style={{
                 position: 'absolute',
                 top: '50%',
@@ -150,7 +151,8 @@ export default function ExperienceTimeline() {
                 color: 'transparent',
                 WebkitTextStroke: '2px rgba(0,0,0,0.05)',
                 whiteSpace: 'nowrap',
-                pointerEvents: 'none',
+                pointerEvents: 'auto',
+                cursor: 'none',
                 zIndex: 0
               }}
             >
