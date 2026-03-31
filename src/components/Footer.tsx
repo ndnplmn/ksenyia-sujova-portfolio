@@ -137,7 +137,6 @@ export default function Footer() {
               color: 'var(--accent-lime)',
               border: '1px solid var(--accent-lime)',
               padding: '1rem 2rem',
-              borderRadius: '30px',
               fontSize: '1rem',
               cursor: 'none',
               textTransform: 'uppercase',
@@ -145,6 +144,7 @@ export default function Footer() {
               marginTop: '1rem',
               transition: 'background 0.3s, color 0.3s'
             }}
+            data-magnetic-target
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'var(--accent-lime)';
               e.currentTarget.style.color = 'var(--bg-pure)';
@@ -178,6 +178,7 @@ export default function Footer() {
               className="magnetic-link" 
               aria-label={`${network} Profile`}
               style={{ display: 'inline-block', padding: '0.5rem', cursor: 'none' }}
+              data-magnetic-target
             >
               {network}
             </a>

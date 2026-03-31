@@ -85,7 +85,7 @@ export default function ExperienceTimeline() {
       id="experience"
       className="timeline-section"
       style={{ 
-        backgroundColor: '#070A0F', 
+        backgroundColor: 'var(--bg-primary)',
         color: 'var(--text-primary)',
         height: '100vh',
         overflow: 'hidden',
@@ -148,7 +148,7 @@ export default function ExperienceTimeline() {
                 fontSize: 'clamp(8rem, 25vw, 25rem)',
                 fontWeight: 900,
                 color: 'transparent',
-                WebkitTextStroke: '2px rgba(255,255,255,0.05)',
+                WebkitTextStroke: '2px rgba(0,0,0,0.05)',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
                 zIndex: 0
@@ -172,7 +172,7 @@ export default function ExperienceTimeline() {
                   alignItems: 'center',
                   gap: '1.5rem',
                   marginBottom: '1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.1)',
+                  borderBottom: '1px solid rgba(0,0,0,0.1)',
                   paddingBottom: '1.5rem'
                 }}
               >
@@ -200,7 +200,7 @@ export default function ExperienceTimeline() {
           left: '5vw',
           width: '90vw',
           height: '1px',
-          backgroundColor: 'rgba(255,255,255,0.1)',
+          backgroundColor: 'rgba(0,0,0,0.1)',
           zIndex: 10
         }}
       >

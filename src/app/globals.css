@@ -1,16 +1,16 @@
 :root {
-  /* Dark Mode Evolution (Default) */
-  --bg-primary: #070A0F;
-  --bg-pure: #141414;
-  --surface-secondary: #2B2F36;
+  /* Light Mode — Primary palette */
+  --bg-primary: #f4f4f9;
+  --bg-pure: #ffffff;
+  --surface-secondary: #c8c8d4;
 
-  /* Light Mode Adaptativo */
-  --text-primary: #F0EEE9;
-  --text-secondary: #F7F3EE;
-  --text-inverse: #070A0F;
+  /* Text colors */
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a5a;
+  --text-inverse: #f4f4f9;
 
-  --accent-lime: #B6FF3B;
-  --accent-mist: #BFD3E7;
+  --accent-lime: #96C0D4;
+  --accent-mist: #7AABC0;
 
   --ease-fluid: cubic-bezier(0.7, 0, 0.3, 1);
   --ease-magnetic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -45,6 +45,46 @@ html, body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ============================================
+   2026 MAX PRO: FILM AURA & TEXTURE
+   ============================================ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -200%;
+  z-index: 9999999;
+  opacity: 0.045; /* Ultra-subtle node */
+  pointer-events: none;
+  background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)"/%3E%3C/svg%3E');
+  animation: grain 8s steps(10) infinite;
+  will-change: transform;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+/* Optical Vignette & Chromatic Aberration simulation */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999998;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 0%, rgba(26,26,46,0.02) 70%, rgba(26,26,46,0.15) 100%);
+  box-shadow: inset 0 0 150px rgba(26,26,46,0.1);
+}
+
 
 * {
   box-sizing: border-box;
@@ -100,7 +140,7 @@ a {
 .cursor-dot.active {
   width: 40px;
   height: 40px;
-  background-color: rgba(182, 255, 59, 0.2);
+  background-color: rgba(150, 192, 212, 0.2);
   border: 1px solid var(--accent-lime);
 }
 
@@ -142,6 +182,13 @@ a {
   .site-header {
     padding: 1.2rem 5% !important;
   }
+  .desktop-nav,
+  .contact-pill {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: block !important;
+  }
 
   /* ── HERO ── */
   .hero-section {
@@ -178,7 +225,7 @@ a {
     width: 100% !important;
     height: auto !important;
     padding: 10vw 0 !important;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
     position: relative !important;
   }
   .timeline-slide:last-child {

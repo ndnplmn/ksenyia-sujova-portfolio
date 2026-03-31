@@ -35,64 +35,70 @@ export default function Hero() {
       // ── 3. SCROLL ANIMATION ────────────────────────────────────────────────
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
+      const scrollHandler = (self: { progress: number }) => {
+        const p = self.progress;
+
+        // Text: phase 0→0.4 — rise and fade out
+        if (span1Ref.current && span2Ref.current) {
+          const textProgress = Math.min(p / 0.4, 1);
+          gsap.set([span1Ref.current, span2Ref.current], {
+            y: textProgress * (isMobile ? -100 : -180),
+            opacity: 1 - textProgress,
+            scale: 1 - textProgress * 0.1
+          });
+        }
+        if (subtitleRef.current) {
+          const subProgress = Math.min(p / 0.3, 1);
+          gsap.set(subtitleRef.current, {
+            y: subProgress * (isMobile ? -40 : -80),
+            opacity: 1 - subProgress
+          });
+        }
+
+        // Overlay: phase 0.1→0.6 — fade out (reveal video)
+        if (overlayRef.current) {
+          const overlayProgress = Math.max(0, Math.min((p - 0.1) / 0.5, 1));
+          gsap.set(overlayRef.current, { opacity: 0.7 - overlayProgress * 0.7 });
+        }
+
+        // Video: phase 0.3→1 — slow zoom in
+        if (videoRef.current) {
+          const videoProgress = Math.max(0, Math.min((p - 0.3) / 0.7, 1));
+          gsap.set(videoRef.current, { scale: 1 + videoProgress * 0.1 });
+
+          // Also scrub playback
+          if (videoRef.current.duration > 0) {
+            videoRef.current.currentTime = p * (videoRef.current.duration - 0.1);
+          }
+        }
+      };
+
+      // Scroll animation — both desktop and mobile
       if (!isMobile) {
-        // Use a minimal inline scroll tracker — avoids Lenis timing issues
-        // by reading the native scrollY that ScrollTrigger already normalizes
-        const scrollTriggerInstance = ScrollTrigger.create({
+        ScrollTrigger.create({
           trigger: containerRef.current,
           start: 'top top',
           end: '+=200%',
           pin: true,
           anticipatePin: 1,
           scrub: 1.5,
-          onUpdate: (self) => {
-            const p = self.progress;
-
-            // Text: phase 0→0.4 — rise and fade out
-            if (span1Ref.current && span2Ref.current) {
-              const textProgress = Math.min(p / 0.4, 1);
-              gsap.set([span1Ref.current, span2Ref.current], {
-                y: textProgress * -180,
-                opacity: 1 - textProgress,
-                scale: 1 - textProgress * 0.1
-              });
-            }
-            if (subtitleRef.current) {
-              const subProgress = Math.min(p / 0.3, 1);
-              gsap.set(subtitleRef.current, {
-                y: subProgress * -80,
-                opacity: 1 - subProgress
-              });
-            }
-
-            // Overlay: phase 0.1→0.6 — fade out (reveal video)
-            if (overlayRef.current) {
-              const overlayProgress = Math.max(0, Math.min((p - 0.1) / 0.5, 1));
-              gsap.set(overlayRef.current, { opacity: 0.5 - overlayProgress * 0.5 });
-            }
-
-            // Video: phase 0.3→1 — slow zoom in
-            if (videoRef.current) {
-              const videoProgress = Math.max(0, Math.min((p - 0.3) / 0.7, 1));
-              gsap.set(videoRef.current, { scale: 1 + videoProgress * 0.1 });
-
-              // Also scrub playback
-              if (videoRef.current.duration > 0) {
-                videoRef.current.currentTime = p * (videoRef.current.duration - 0.1);
-              }
-            }
-          }
+          onUpdate: scrollHandler
         });
-
-        return () => {
-          scrollTriggerInstance.kill();
-        };
+      } else {
+        // Mobile: no pin, shorter scroll range, natural scroll
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.5,
+          onUpdate: scrollHandler
+        });
       }
 
       // ── 4. MOUSE KINETICS (desktop only) ───────────────────────────────────
+      let mouseTimeoutId: NodeJS.Timeout;
       if (!isMobile) {
         let lastX = 0;
-        let timeoutId: NodeJS.Timeout;
 
         const handleMouseMove = (e: MouseEvent) => {
           const nX = (e.clientX / window.innerWidth) * 2 - 1;
@@ -110,8 +116,8 @@ export default function Hero() {
             overwrite: 'auto'
           });
 
-          clearTimeout(timeoutId);
-          timeoutId = setTimeout(() => {
+          clearTimeout(mouseTimeoutId);
+          mouseTimeoutId = setTimeout(() => {
             gsap.to([span1Ref.current, span2Ref.current], {
               skewX: 0,
               duration: 1.4,
@@ -121,18 +127,12 @@ export default function Hero() {
         };
 
         window.addEventListener('mousemove', handleMouseMove);
-
-        return () => {
-          window.removeEventListener('preloaderComplete', handlePreloaderDone);
-          window.removeEventListener('mousemove', handleMouseMove);
-          clearTimeout(fallbackTimer);
-          clearTimeout(timeoutId);
-        };
       }
 
       return () => {
         window.removeEventListener('preloaderComplete', handlePreloaderDone);
         clearTimeout(fallbackTimer);
+        clearTimeout(mouseTimeoutId);
       };
     }, containerRef);
 
@@ -152,6 +152,7 @@ export default function Hero() {
         alignItems: 'center',
         position: 'relative',
         overflow: 'hidden',
+        backgroundColor: 'var(--bg-primary)',
       }}
     >
       {/* Video background */}
@@ -166,12 +167,13 @@ export default function Hero() {
             width: '100%', height: '100%',
             objectFit: 'cover',
             transformOrigin: 'center center',
-            willChange: 'transform'
+            willChange: 'transform',
+            mixBlendMode: 'screen'
           }}
         />
         <div
           ref={overlayRef}
-          style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1 }}
+          style={{ position: 'absolute', inset: 0, background: 'rgba(244,244,249,0.7)', zIndex: 1 }}
         />
       </div>
 
@@ -215,7 +217,7 @@ export default function Hero() {
             fontSize: 'clamp(0.65rem, 1.2vw, 0.9rem)',
             letterSpacing: '0.3em',
             textTransform: 'uppercase',
-            color: 'rgba(240, 238, 233, 0.6)',
+            color: 'rgba(26, 26, 46, 0.6)',
             margin: 0,
             willChange: 'transform, opacity',
           }}
