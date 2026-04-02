@@ -34,8 +34,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body>
-        {/* Filtro global de Ruido / Film Grain para dar textura analógica */}
-        <div className="noise-overlay" />
         <Preloader />
         <SmoothScrollProvider>
           <CustomCursor />
