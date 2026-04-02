@@ -185,7 +185,7 @@ export default function Hero() {
             fontSize: 'clamp(2.5rem, 11vw, 9rem)', // Ultra-massive for 2026 impact
             fontWeight: 800,
             letterSpacing: '-0.04em',
-            color: 'var(--text-primary)',
+            color: '#FFFFFF',
             margin: 0,
             display: 'flex',
             gap: 'clamp(0.5rem, 2vw, 2rem)',

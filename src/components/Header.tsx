@@ -160,7 +160,7 @@ export default function Header() {
           aria-label="Go to home page"
           style={{ 
             textDecoration: 'none', 
-            color: 'var(--text-primary)', 
+            color: '#FFFFFF', 
             fontSize: '1rem', 
             fontWeight: 800, 
             letterSpacing: '0.1em',
