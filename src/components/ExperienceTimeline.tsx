@@ -46,54 +46,55 @@ export default function ExperienceTimeline() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const milestones = gsap.utils.toArray('.milestone-panel') as HTMLElement[];
+      const totalMilestones = milestones.length;
       
-      // Pin the main container while we cycle through milestones
+      // Pin the entire section
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: 'top top',
-        end: () => `+=${milestones.length * 100}%`,
+        end: () => `+=${totalMilestones * 100}%`,
         pin: true,
         scrub: true,
         anticipatePin: 1,
       });
 
+      // Initial state: hide all except the first milestone
       milestones.forEach((panel, i) => {
-        if (panel === milestones[milestones.length - 1]) return;
+        gsap.set(panel, { 
+          autoAlpha: i === 0 ? 1 : 0, 
+          y: i === 0 ? 0 : 100,
+          scale: i === 0 ? 1 : 0.9
+        });
+      });
 
-        const timeline = gsap.timeline({
+      // Individual transitions per milestone scroll step
+      milestones.forEach((panel, i) => {
+        if (i === 0) return;
+
+        const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: panel,
-            start: 'top top',
-            end: '+=100%',
+            trigger: sectionRef.current,
+            start: () => `${(i / totalMilestones) * 100}% top`,
+            end: () => `${((i + 1) / totalMilestones) * 100}% top`,
             scrub: true,
           }
         });
 
-        // 2026 Pinnacle Transition: Depth & Scale
-        timeline.to(panel.querySelector('.milestone-content'), {
-          opacity: 0,
-          y: -100,
-          scale: 0.95,
-          filter: 'blur(10px)',
-          ease: 'power2.inOut'
-        })
-        .to(panel.querySelector('.huge-year-bg'), {
-          scale: 1.5,
-          opacity: 0,
-          y: -200,
-          ease: 'power2.inOut'
+        // Exit previous, enter current
+        tl.to(milestones[i - 1], { 
+          autoAlpha: 0, 
+          y: -100, 
+          scale: 0.9, 
+          duration: 1 
+        }, 0)
+        .to(panel, { 
+          autoAlpha: 1, 
+          y: 0, 
+          scale: 1, 
+          duration: 1 
         }, 0);
       });
 
-      // Background Aura pulsing
-      gsap.to('.timeline-aura', {
-        scale: 1.1,
-        opacity: 0.6,
-        duration: 4,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut'
-      });
       // Kinetic Progress Bar
       gsap.to('.progress-fill', {
         height: '100%',
@@ -101,11 +102,20 @@ export default function ExperienceTimeline() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${milestones.length * 100}%`,
+          end: () => `+=${totalMilestones * 100}%`,
           scrub: true
         }
       });
 
+      // Background Aura pulsing
+      gsap.to('.timeline-aura', {
+        scale: 1.2,
+        opacity: 0.4,
+        duration: 5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut'
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -172,7 +182,10 @@ export default function ExperienceTimeline() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              zIndex: experiences.length - index
+              zIndex: experiences.length - index,
+              pointerEvents: 'none',
+              opacity: index === 0 ? 1 : 0,
+              visibility: index === 0 ? 'visible' : 'hidden',
             }}
           >
             {/* Background Year - High Density Parallax */}
