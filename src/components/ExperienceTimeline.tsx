@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -42,8 +42,13 @@ const experiences = [
 export default function ExperienceTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     const ctx = gsap.context(() => {
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
       if (isMobile) return;
@@ -126,10 +131,11 @@ export default function ExperienceTimeline() {
       style={{ 
         backgroundColor: 'var(--bg-pure)',
         color: 'var(--text-primary)',
-        height: '100vh',
-        overflow: 'hidden',
+        height: isMobile ? 'auto' : '100vh',
+        overflow: isMobile ? 'visible' : 'hidden',
         position: 'relative',
-        zIndex: 10
+        zIndex: 10,
+        padding: isMobile ? '20vw 0' : '0'
       }}
     >
       {/* Background Cinematic Aura - Sapphire Blend */}
@@ -171,36 +177,38 @@ export default function ExperienceTimeline() {
             key={index} 
             className="timeline-slide milestone-panel"
             style={{ 
-              position: 'absolute',
+              position: isMobile ? 'relative' : 'absolute',
               top: 0,
               left: 0,
               width: '100%',
-              height: '100%', 
+              height: isMobile ? 'auto' : '100%', 
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               zIndex: experiences.length - index,
-              pointerEvents: 'none',
-              opacity: index === 0 ? 1 : 0,
-              visibility: index === 0 ? 'visible' : 'hidden',
+              pointerEvents: isMobile ? 'auto' : 'none',
+              opacity: (isMobile || index === 0) ? 1 : 0,
+              visibility: (isMobile || index === 0) ? 'visible' : 'hidden',
+              marginBottom: isMobile ? '15vh' : 0
             }}
           >
             {/* Background Year - Sapphire Stroke */}
             <div 
               className="huge-year"
               style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                fontSize: 'clamp(10rem, 30vw, 35rem)',
+                position: isMobile ? 'relative' : 'absolute',
+                top: isMobile ? 'auto' : '50%',
+                left: isMobile ? 'auto' : '50%',
+                transform: isMobile ? 'none' : 'translate(-50%, -50%)',
+                fontSize: isMobile ? '20vw' : 'clamp(10rem, 30vw, 35rem)',
                 fontWeight: 900,
                 color: 'transparent',
                 WebkitTextStroke: '1px var(--surface-secondary)',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
                 zIndex: 1,
-                willChange: 'transform, opacity'
+                willChange: 'transform, opacity',
+                marginBottom: isMobile ? '-5vw' : 0
               }}
             >
               {exp.year.split('—')[0]}
@@ -296,9 +304,10 @@ export default function ExperienceTimeline() {
         ))}
       </div>
 
-      {/* Kinetic Progress Indicator */}
-      <div 
-        style={{
+      {/* Kinetic Progress Indicator (Hide on Mobile) */}
+      {!isMobile && (
+        <div 
+          style={{
           position: 'absolute',
           right: '5vw',
           top: '50%',
@@ -333,6 +342,7 @@ export default function ExperienceTimeline() {
           SCROLL TO EXPLORE
         </div>
       </div>
+      )}
     </section>
   );
 }

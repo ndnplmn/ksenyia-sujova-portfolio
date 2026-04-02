@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -13,8 +13,13 @@ export default function Hero() {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     const ctx = gsap.context(() => {
       // ── 1. INITIAL STATES ──────────────────────────────────────────────────
       gsap.set(containerRef.current, { autoAlpha: 1 });
@@ -33,7 +38,6 @@ export default function Hero() {
       const fallbackTimer = setTimeout(() => introTl.play(), 1500);
 
       // ── 3. SCROLL ANIMATION ────────────────────────────────────────────────
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
       const scrollHandler = (self: { progress: number }) => {
         const p = self.progress;
@@ -76,10 +80,10 @@ export default function Hero() {
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: 'top top',
-        end: isMobile ? '+=120%' : '+=200%',
+        end: isMobile ? '+=80%' : '+=200%', // Shorter end on mobile to keep pace
         pin: true,
         anticipatePin: 1,
-        scrub: isMobile ? 0.8 : 1.5,
+        scrub: isMobile ? 0.4 : 1.5, // Faster scrub for touch
         onUpdate: scrollHandler
       });
 
@@ -118,6 +122,7 @@ export default function Hero() {
       }
 
       return () => {
+        window.removeEventListener('resize', checkMobile);
         window.removeEventListener('preloaderComplete', handlePreloaderDone);
         clearTimeout(fallbackTimer);
         clearTimeout(mouseTimeoutId);
@@ -133,14 +138,14 @@ export default function Hero() {
       className="hero-section"
       aria-labelledby="hero-heading"
       style={{
-        height: '100vh',
+        height: isMobile ? '100svh' : '100vh', 
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
         overflow: 'hidden',
-        backgroundColor: 'var(--bg-pure)', // Fixed pure white background to match reference
+        backgroundColor: 'var(--bg-pure)', 
       }}
     >
 
@@ -208,17 +213,24 @@ export default function Hero() {
 
         <p
           ref={subtitleRef}
+          className="hero-subtitle"
           style={{
-            fontSize: 'clamp(0.7rem, 1.3vw, 1rem)',
+            fontSize: 'clamp(0.65rem, 3vw, 1.1rem)', // Better mobile scaling
             fontWeight: 500,
-            letterSpacing: '0.4em',
+            letterSpacing: isMobile ? '0.2em' : '0.4em', // Tighten on mobile to prevent wrap
             textTransform: 'uppercase',
-            color: '#934327', // Mathematical inverse of #6cbcd8
+            color: '#934327', 
             margin: 0,
+            padding: isMobile ? '0 1rem' : '0', // Safety breathing room
+            lineHeight: 1.5,
             willChange: 'transform, opacity',
           }}
         >
-          Digital Art Direction&nbsp;&nbsp;/&nbsp;&nbsp;UI·UX Design&nbsp;&nbsp;/&nbsp;&nbsp;Motion
+          {isMobile ? (
+            <>Digital Art Direction<br/>UI·UX Design / Motion</>
+          ) : (
+            <>Digital Art Direction&nbsp;&nbsp;/&nbsp;&nbsp;UI·UX Design&nbsp;&nbsp;/&nbsp;&nbsp;Motion</>
+          )}
         </p>
       </div>
 

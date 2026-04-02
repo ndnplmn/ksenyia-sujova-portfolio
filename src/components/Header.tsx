@@ -49,13 +49,18 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const linksWrapRef = useRef<HTMLUListElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     // Phase 2: Variable Typography Dynamics
     const logoTxt = document.querySelector('.brand-name-dynamic');
     if (logoTxt) {
       gsap.to(logoTxt, {
-        fontWeight: 100, // Shift from 800 (style) to 100 on scroll
+        fontWeight: isMobile ? 800 : 100, // Stay bold on mobile, variable on desktop
         scrollTrigger: {
           trigger: 'body',
           start: 'top top',

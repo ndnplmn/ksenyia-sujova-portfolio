@@ -17,7 +17,7 @@ interface Project {
   tags: string[];
 }
 
-const ColumnView = ({ projectsArray, colRef, customStyle = {} }: { projectsArray: Project[], colRef: React.RefObject<HTMLDivElement | null>, customStyle?: React.CSSProperties }) => (
+const ColumnView = ({ projectsArray, colRef, isMobile, customStyle = {} }: { projectsArray: Project[], colRef: React.RefObject<HTMLDivElement | null>, isMobile: boolean, customStyle?: React.CSSProperties }) => (
   <div 
     ref={colRef}
     className="portfolio-col"
@@ -25,7 +25,7 @@ const ColumnView = ({ projectsArray, colRef, customStyle = {} }: { projectsArray
       display: 'flex', 
       flexDirection: 'column', 
       gap: '8vw',
-      width: '33.333%',
+      width: '100%', // Base for mobile, overridden by JS state if needed or handled by wrapper
       willChange: 'transform',
       ...customStyle
     }}
@@ -37,8 +37,8 @@ const ColumnView = ({ projectsArray, colRef, customStyle = {} }: { projectsArray
           data-speed={project.drift}
           style={{ 
             position: 'relative', 
-            width: idx % 2 === 0 ? '110%' : '90%',
-            marginLeft: project.offset,
+            width: isMobile ? '100%' : (idx % 2 === 0 ? '110%' : '90%'),
+            marginLeft: isMobile ? '0' : project.offset,
             overflow: 'hidden',
             borderRadius: '24px', 
             backgroundColor: 'var(--accent-ice)',
@@ -110,6 +110,14 @@ export default function PortfolioGrid() {
   const col1Ref = useRef<HTMLDivElement>(null);
   const col2Ref = useRef<HTMLDivElement>(null);
   const col3Ref = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // High-Quality Hydration Guard: Initialize state after mount to ensure SSR matches hydration pass exactly
   const [gridData, setGridData] = useState<{col1: Project[], col2: Project[], col3: Project[]} | null>(null);
@@ -221,12 +229,18 @@ export default function PortfolioGrid() {
         </p>
       </div>
 
-      <div className="portfolio-grid-wrapper" style={{ display: 'flex', gap: '2vw', alignItems: 'flex-start', justifyContent: 'center' }}>
+      <div className="portfolio-grid-wrapper" style={{ 
+        display: 'flex', 
+        gap: '2vw', 
+        alignItems: 'flex-start', 
+        justifyContent: 'center',
+        flexDirection: isMobile ? 'column' : 'row' 
+      }}>
         {gridData ? (
           <>
-            <ColumnView projectsArray={gridData.col1} colRef={col1Ref} />
-            <ColumnView projectsArray={gridData.col2} colRef={col2Ref} customStyle={{ marginTop: '-20vw' }} />
-            <ColumnView projectsArray={gridData.col3} colRef={col3Ref} />
+            <ColumnView projectsArray={gridData.col1} colRef={col1Ref} isMobile={isMobile} customStyle={{ width: isMobile ? '100%' : '33.33%' }} />
+            <ColumnView projectsArray={gridData.col2} colRef={col2Ref} isMobile={isMobile} customStyle={{ marginTop: isMobile ? '0' : '-20vw', width: isMobile ? '100%' : '33.33%' }} />
+            <ColumnView projectsArray={gridData.col3} colRef={col3Ref} isMobile={isMobile} customStyle={{ width: isMobile ? '100%' : '33.33%' }} />
           </>
         ) : (
           <div style={{ height: '100vh', width: '100%' }} /> // Stable SSR Placeholder
