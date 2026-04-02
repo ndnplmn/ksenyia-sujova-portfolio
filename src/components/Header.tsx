@@ -131,6 +131,22 @@ export default function Header() {
         }}
       >
         {/* Logo */}
+        {/* 2026 Nebula Identity Filter */}
+        <svg style={{ visibility: 'hidden', position: 'absolute', width: 0, height: 0 }}>
+          <filter id="nebula-goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+          <filter id="liquid-glass">
+            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" seed="1" result="noise">
+               <animate attributeName="baseFrequency" values="0.01;0.015;0.01" dur="10s" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </svg>
+
+        {/* Logo: Pinnacle 2026 Nebula Morph */}
         <Link
           href="/"
           className="brand-logo"
@@ -143,7 +159,7 @@ export default function Header() {
             color: 'var(--text-primary)',
             cursor: 'none',
             position: 'relative',
-            zIndex: 10
+            zIndex: 1000
           }}
           data-magnetic-target
           onMouseEnter={(e) => {
@@ -152,24 +168,25 @@ export default function Header() {
              const s = e.currentTarget.querySelector('.logo-s');
              const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
              
-             // 2026 Liquid Morph: Scale slightly first, then stretch
+             // Nebula Kinetic Morph: Fluid stretch with liquid-glass warp
              gsap.to(pill, { 
-               width: '210px', 
+               width: '230px', 
                backgroundColor: 'var(--bg-pure)', 
                borderColor: 'var(--accent-powder-blue)', 
-               boxShadow: '0 10px 40px rgba(150, 192, 212, 0.4)', 
-               duration: 0.8, 
-               ease: 'elastic.out(1, 0.75)' 
+               boxShadow: '0 15px 45px rgba(150, 192, 212, 0.45)', 
+               filter: 'url(#liquid-glass)',
+               duration: 0.9, 
+               ease: 'elastic.out(1.1, 0.6)' 
              });
              
-             // Letter physics: offset in 3D/Position
-             gsap.to(k, { x: -82, y: -1, rotate: -5, color: 'var(--accent-powder-blue)', duration: 0.7, ease: 'power4.out' });
-             gsap.to(s, { x: -7, y: 1, rotate: 5, color: 'var(--accent-powder-blue)', duration: 0.7, ease: 'power4.out' });
+             // Magnetic Identity: 3D character unfurling
+             gsap.to(k, { x: -88, y: -2, rotate: -8, color: 'var(--accent-powder-blue)', duration: 0.8, ease: 'power4.out' });
+             gsap.to(s, { x: -10, y: 2, rotate: 8, color: 'var(--accent-powder-blue)', duration: 0.8, ease: 'power4.out' });
              
-             // Unfurling reveal: Bloom effect from center
+             // Staggered Nebula Bloom
              gsap.fromTo(rest, 
-               { opacity: 0, x: (idx) => idx === 0 ? 30 : 15, scale: 0.8, filter: 'blur(10px)' },
-               { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', stagger: 0.08, duration: 0.6, delay: 0.1, ease: 'back.out(1.7)' }
+               { opacity: 0, x: (idx) => idx === 0 ? 40 : 20, scale: 0.7, filter: 'blur(15px)' },
+               { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', stagger: 0.07, duration: 0.7, delay: 0.1, ease: 'back.out(2)' }
              );
           }}
           onMouseLeave={(e) => {
@@ -179,76 +196,79 @@ export default function Header() {
              const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
  
              gsap.to(pill, { 
-               width: '45px', 
-               backgroundColor: 'rgba(255, 255, 255, 0.05)', 
-               borderColor: 'rgba(26, 26, 46, 0.1)', 
+               width: '48px', 
+               backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+               borderColor: 'rgba(26, 26, 46, 0.15)', 
                boxShadow: 'none', 
-               duration: 0.6, 
+               filter: 'none',
+               duration: 0.7, 
                ease: 'expo.inOut' 
              });
              
              gsap.to([k, s], { x: 0, y: 0, rotate: 0, color: 'var(--text-primary)', duration: 0.6, ease: 'expo.inOut' });
-             gsap.to(rest, { opacity: 0, x: 10, scale: 0.9, filter: 'blur(5px)', duration: 0.4, ease: 'power2.in' });
+             gsap.to(rest, { opacity: 0, x: 15, scale: 0.85, filter: 'blur(8px)', duration: 0.5, ease: 'power2.in' });
           }}
         >
           <div
             className="logo-pill"
             style={{
-              width: '45px',
-              height: '45px',
+              width: '48px',
+              height: '48px',
               borderRadius: '999px',
-              border: '1px solid rgba(26, 26, 46, 0.1)',
+              border: '1px solid rgba(26, 26, 46, 0.12)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              overflow: 'hidden',
+              overflow: 'visible', // Allow liquid-glass distortion to bleed
               position: 'relative',
-              background: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(20px) saturate(180%)',
+              background: 'rgba(255, 255, 255, 0.08)',
+              backdropFilter: 'blur(25px) saturate(200%)',
               transition: 'border-color 0.4s ease',
-              willChange: 'width, background-color, box-shadow, transform'
+              willChange: 'width, background-color, box-shadow, transform, filter'
             }}
           >
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', paddingLeft: '2px' }}>
               <span className="logo-k" style={{ 
                 position: 'absolute', 
                 fontWeight: 900, 
-                fontSize: '1.1rem', 
-                letterSpacing: '-0.05em',
+                fontSize: '1.2rem', 
+                letterSpacing: '-0.06em',
                 willChange: 'transform, color, rotate' 
               }}>K</span>
               
               <span className="logo-name-rest" style={{ 
                 position: 'absolute', 
-                left: '32px', 
+                left: '35px', 
                 opacity: 0, 
                 fontWeight: 800, 
-                fontSize: '0.8rem', 
-                letterSpacing: '0.05em', 
+                fontSize: '0.85rem', 
+                letterSpacing: '0.06em', 
                 whiteSpace: 'nowrap', 
                 color: 'var(--text-primary)',
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-heading)'
               }}>senyia</span>
               
               <span className="logo-s" style={{ 
                 position: 'absolute', 
                 fontWeight: 900, 
-                fontSize: '1.1rem', 
-                letterSpacing: '-0.05em',
-                marginLeft: '1.3em',
+                fontSize: '1.2rem', 
+                letterSpacing: '-0.06em',
+                marginLeft: '1.35em',
                 willChange: 'transform, color, rotate' 
               }}>S</span>
               
               <span className="logo-name-rest" style={{ 
                 position: 'absolute', 
-                left: '122px', 
+                left: '132px', 
                 opacity: 0, 
                 fontWeight: 800, 
-                fontSize: '0.8rem', 
-                letterSpacing: '0.05em', 
+                fontSize: '0.85rem', 
+                letterSpacing: '0.06em', 
                 whiteSpace: 'nowrap', 
                 color: 'var(--text-primary)',
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-heading)'
               }}>ujova</span>
             </div>
           </div>
