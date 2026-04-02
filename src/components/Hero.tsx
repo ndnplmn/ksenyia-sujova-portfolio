@@ -180,7 +180,7 @@ export default function Hero() {
       >
         <h1
           id="hero-heading"
-          className="kinetic-text liquid-text"
+          className="kinetic-text"
           style={{
             fontSize: 'clamp(2.5rem, 11vw, 9rem)', // Ultra-massive for 2026 impact
             fontWeight: 800,
@@ -244,22 +244,6 @@ export default function Hero() {
           animation: 'pulse 1.8s ease-in-out infinite',
         }} />
       </div>
-      {/* Liquid Displacement Filter Definition */}
-      <svg style={{ position: 'absolute', width: 0, height: 0 }}>
-        <filter id="liquidFilter">
-          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" seed="1">
-            <animate attributeName="baseFrequency" values="0.02;0.05;0.02" dur="10s" repeatCount="indefinite" />
-          </feTurbulence>
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" />
-        </filter>
-      </svg>
-
-      <style jsx>{`
-        .liquid-text {
-          filter: url(#liquidFilter);
-          transition: filter 0.5s ease;
-        }
-      `}</style>
     </section>
   );
 }
