@@ -210,6 +210,18 @@ a {
     display: flex !important;
   }
 
+  /* Ensure overlays are visible on mobile (no hover) */
+  .premium-overlay {
+    opacity: 1 !important;
+    background: linear-gradient(to top, rgba(10,14,26,0.8) 0%, transparent 60%) !important;
+    padding: 2rem !important;
+  }
+  .tech-tag {
+    opacity: 1 !important;
+    transform: none !important;
+    border-color: rgba(255,255,255,0.4) !important;
+  }
+
   /* ── EXPERIENCE TIMELINE ── */
   .timeline-section {
     height: auto !important;

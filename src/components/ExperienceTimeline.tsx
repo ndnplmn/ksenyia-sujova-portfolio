@@ -45,6 +45,9 @@ export default function ExperienceTimeline() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (isMobile) return;
+
       const milestones = gsap.utils.toArray('.milestone-panel') as HTMLElement[];
       const totalMilestones = milestones.length;
       
@@ -166,7 +169,7 @@ export default function ExperienceTimeline() {
         {experiences.map((exp, index) => (
           <div 
             key={index} 
-            className="milestone-panel"
+            className="timeline-slide milestone-panel"
             style={{ 
               position: 'absolute',
               top: 0,
@@ -184,7 +187,7 @@ export default function ExperienceTimeline() {
           >
             {/* Background Year - Sapphire Stroke */}
             <div 
-              className="huge-year-bg"
+              className="huge-year"
               style={{
                 position: 'absolute',
                 top: '50%',
@@ -205,7 +208,7 @@ export default function ExperienceTimeline() {
 
             {/* Kinetic Content Container */}
             <div 
-              className="milestone-content"
+              className="content-box milestone-content"
               style={{
                 width: '90%',
                 maxWidth: '800px',
@@ -214,7 +217,8 @@ export default function ExperienceTimeline() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '2rem',
-                willChange: 'transform, opacity, filter'
+                willChange: 'transform, opacity, filter',
+                WebkitBackfaceVisibility: 'hidden', // iOS hardware acceleration
               }}
             >
               <div 

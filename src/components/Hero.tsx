@@ -150,6 +150,8 @@ export default function Hero() {
           ref={videoRef}
           src="/hero-video-2026.mp4"
           muted
+          autoPlay
+          loop
           playsInline
           preload="auto"
           style={{
@@ -177,13 +179,15 @@ export default function Hero() {
           gap: '2rem',
           mixBlendMode: 'difference', // Move to container to bypass child isolation
           pointerEvents: 'none', // Allow mouse to hit video for any interaction
+          WebkitBackfaceVisibility: 'hidden', // iOS hardware acceleration
+          WebkitTransform: 'translate3d(0,0,0)', // Stabilize blending
         }}
       >
         <h1
           id="hero-heading"
           className="kinetic-text"
           style={{
-            fontSize: 'clamp(2.5rem, 11vw, 9rem)', 
+            fontSize: 'clamp(2rem, 11vw, 9rem)', 
             fontWeight: 800,
             letterSpacing: '-0.04em',
             color: '#FDA98E', // Mathematical inverse of #025671
