@@ -1,19 +1,16 @@
 :root {
-  /* Pinnacle Sapphire 2026 — Primary Palette */
-  --bg-primary: #FFFFFF;
+  /* 2026 Pinnacle Sapphire - Recalibrated Palette */
   --bg-pure: #FFFFFF;
-  --surface-secondary: #E2E8F0;
-
-  /* Text & Typography — Midnight Ink Standard */
-  --text-primary: #0A0E1A;
-  --text-secondary: #6B7C93;
+  --bg-primary: #FFFFFF;
+  --accent-sapphire: #67bed9; /* User preferred Cyan-Sapphire */
+  --accent-powder: #E0F2F7;   /* Adjusted for harmony with #67bed9 */
+  --accent-ice: #F0F9FB;      /* Ultra-soft cyan tint */
+  --text-primary: #025671;    /* User preferred Teal-Midnight Ink */
+  --text-secondary: rgba(2, 86, 113, 0.7);
   --text-inverse: #FFFFFF;
-
-  /* Accents — Sapphire & Aura */
-  --accent-sapphire: #0033FF;
-  --accent-ice: #F0F4FF;
-  --accent-powder: #B8CFFF;
-  --accent-powder-blue: #B8CFFF; /* Alias for compatibility */
+  --surface-secondary: rgba(2, 86, 113, 0.1);
+  --selection-bg: #67bed9;
+  --selection-text: #FFFFFF;
 
   --ease-fluid: cubic-bezier(0.7, 0, 0.3, 1);
   --ease-magnetic: cubic-bezier(0.175, 0.885, 0.32, 1.275);

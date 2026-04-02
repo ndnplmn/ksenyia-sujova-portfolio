@@ -137,74 +137,52 @@ export default function Header() {
           className="brand-logo"
           onClick={(e) => { e.preventDefault(); setMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
           aria-label="Go to home page"
-          style={{
+          style={{ 
+            textDecoration: 'none', 
+            color: 'var(--text-primary)', 
+            fontSize: '1.2rem', 
+            fontWeight: 800, 
+            letterSpacing: '-0.02em',
             display: 'flex',
             alignItems: 'center',
-            textDecoration: 'none',
-            color: 'var(--text-primary)',
-            cursor: 'none',
-            position: 'relative',
-            zIndex: 1000,
-            fontFamily: 'var(--font-heading)',
-            fontSize: '1.2rem',
-            fontWeight: 900,
-            letterSpacing: '-0.02em',
-            padding: '10px 0'
+            overflow: 'hidden',
+            cursor: 'none'
           }}
-          data-magnetic-target
           onMouseEnter={(e) => {
-             const k = e.currentTarget.querySelector('.logo-k');
-             const s = e.currentTarget.querySelector('.logo-s');
-             const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
-             
-             // Minimalist expansion: Subtle, elegant, typographical
-             gsap.to(k, { x: -5, color: 'var(--accent-sapphire)', duration: 0.5, ease: 'power3.out' });
-             gsap.to(s, { x: 5, color: 'var(--accent-sapphire)', duration: 0.5, ease: 'power3.out' });
-             
+             const rest = e.currentTarget.querySelector('.logo-name-full');
              gsap.to(rest, { 
+               width: 'auto',
                opacity: 1, 
-               x: 0, 
-               stagger: 0.05, 
+               marginLeft: '0.4em',
                duration: 0.6, 
-               ease: 'power2.out' 
+               ease: 'power3.out' 
              });
           }}
           onMouseLeave={(e) => {
-             const k = e.currentTarget.querySelector('.logo-k');
-             const s = e.currentTarget.querySelector('.logo-s');
-             const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
- 
-             gsap.to([k, s], { x: 0, color: 'var(--text-primary)', duration: 0.5, ease: 'power3.inOut' });
-             gsap.to(rest, { opacity: 0, x: (idx) => idx === 0 ? 10 : -10, duration: 0.4, ease: 'power2.in' });
+             const rest = e.currentTarget.querySelector('.logo-name-full');
+             gsap.to(rest, { 
+               width: 0,
+               opacity: 0, 
+               marginLeft: 0,
+               duration: 0.4, 
+               ease: 'power2.in' 
+             });
           }}
         >
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', height: '1.5em' }}>
-            <span className="logo-k" style={{ position: 'relative', display: 'inline-block', zIndex: 2 }}>K</span>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ position: 'relative', zIndex: 2 }}>KS</span>
             
-            <span className="logo-name-rest" style={{ 
+            <span className="logo-name-full" style={{ 
               opacity: 0, 
-              marginLeft: '0.1em', 
-              marginRight: '0.3em',
+              width: 0,
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
               fontSize: '0.8rem', 
               letterSpacing: '0.1em', 
               textTransform: 'uppercase',
               fontWeight: 700,
-              transform: 'translateX(10px)',
               display: 'inline-block'
-            }}>senyia</span>
-            
-            <span className="logo-s" style={{ position: 'relative', display: 'inline-block', zIndex: 2 }}>S</span>
-            
-            <span className="logo-name-rest" style={{ 
-              opacity: 0, 
-              marginLeft: '0.1em',
-              fontSize: '0.8rem', 
-              letterSpacing: '0.1em', 
-              textTransform: 'uppercase',
-              fontWeight: 700,
-              transform: 'translateX(-10px)',
-              display: 'inline-block'
-            }}>ujova</span>
+            }}>senyia Sujova</span>
           </div>
         </Link>
  

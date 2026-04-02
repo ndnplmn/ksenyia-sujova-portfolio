@@ -20,7 +20,7 @@ function AbstractShape() {
       <mesh ref={meshRef} scale={2}>
         <icosahedronGeometry args={[1.5, 2]} />
         <meshStandardMaterial
-          color="#0033FF"
+          color="#67bed9"
           wireframe={true}
           transparent
           opacity={0.15}
@@ -34,11 +34,11 @@ function AbstractShape() {
 
 export default function WebGLBackground() {
   return (
-    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, background: 'radial-gradient(circle at center, #FFFFFF 0%, #F9FBFF 100%)' }}>
+    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, background: 'radial-gradient(circle at center, #FFFFFF 0%, #E0F2F7 100%)' }}>
       <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-        <fog attach="fog" args={['#F9FBFF', 3, 15]} />
+        <fog attach="fog" args={['#E0F2F7', 3, 15]} />
         <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 10, 5]} intensity={2} color="#0033FF" />
+        <directionalLight position={[10, 10, 5]} intensity={2} color="#67bed9" />
         <AbstractShape />
         <Environment preset="city" />
       </Canvas>
