@@ -140,50 +140,16 @@ export default function Header() {
           style={{ 
             textDecoration: 'none', 
             color: 'var(--text-primary)', 
-            fontSize: '1.2rem', 
-            fontWeight: 800, 
-            letterSpacing: '-0.02em',
+            fontSize: '1rem', 
+            fontWeight: 700, 
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
             display: 'flex',
             alignItems: 'center',
-            overflow: 'hidden',
             cursor: 'none'
           }}
-          onMouseEnter={(e) => {
-             const rest = e.currentTarget.querySelector('.logo-name-full');
-             gsap.to(rest, { 
-               width: 'auto',
-               opacity: 1, 
-               marginLeft: '0.4em',
-               duration: 0.6, 
-               ease: 'power3.out' 
-             });
-          }}
-          onMouseLeave={(e) => {
-             const rest = e.currentTarget.querySelector('.logo-name-full');
-             gsap.to(rest, { 
-               width: 0,
-               opacity: 0, 
-               marginLeft: 0,
-               duration: 0.4, 
-               ease: 'power2.in' 
-             });
-          }}
         >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <span style={{ position: 'relative', zIndex: 2 }}>KS</span>
-            
-            <span className="logo-name-full" style={{ 
-              opacity: 0, 
-              width: 0,
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              fontSize: '0.8rem', 
-              letterSpacing: '0.1em', 
-              textTransform: 'uppercase',
-              fontWeight: 700,
-              display: 'inline-block'
-            }}>senyia Sujova</span>
-          </div>
+          Ksenyia Sujova
         </Link>
  
         {/* Desktop: centered nav links */}
