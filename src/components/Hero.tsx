@@ -150,8 +150,6 @@ export default function Hero() {
           ref={videoRef}
           src="/hero-video-2026.mp4"
           muted
-          autoPlay
-          loop
           playsInline
           preload="auto"
           style={{
