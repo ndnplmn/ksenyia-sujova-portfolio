@@ -143,27 +143,6 @@ export default function Hero() {
         backgroundColor: 'var(--bg-pure)', // Fixed pure white background to match reference
       }}
     >
-      {/* High-Fidelity Color Grading Filter */}
-      <svg width="0" height="0" style={{ position: 'absolute' }}>
-        <filter id="luma-to-alpha-high-key">
-          {/* Luma to Alpha extraction */}
-          <feColorMatrix 
-            type="matrix" 
-            values="1 0 0 0 0
-                    0 1 0 0 0
-                    0 0 1 0 0
-                    1 1 1 0 0" 
-            result="masked"
-          />
-          {/* Lift shadows and match the 'Powder Blue' high-key aesthetic */}
-          <feComponentTransfer in="masked">
-            <feFuncR type="linear" slope="0.8" intercept="0.2" />
-            <feFuncG type="linear" slope="0.8" intercept="0.2" />
-            <feFuncB type="linear" slope="1.0" intercept="0.1" /> 
-            <feFuncA type="gamma" exponent="0.8" amplitude="1.2" />
-          </feComponentTransfer>
-        </filter>
-      </svg>
 
       {/* Video background */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
@@ -178,7 +157,6 @@ export default function Hero() {
             objectFit: 'cover',
             transformOrigin: 'center center',
             willChange: 'transform',
-            filter: 'url(#luma-to-alpha-high-key) contrast(0.9) brightness(1.1)', // Final aesthetic polish
           }}
         />
         <div
