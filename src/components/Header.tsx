@@ -17,6 +17,7 @@ const inlineLinkStyle: React.CSSProperties = {
   color: 'var(--text-secondary)',
   transition: 'color 0.3s ease',
   cursor: 'none',
+  mixBlendMode: 'difference',
 };
 
 const pillStyle: React.CSSProperties = {
@@ -34,6 +35,7 @@ const pillStyle: React.CSSProperties = {
   transition: 'all 0.3s ease',
   cursor: 'none',
   whiteSpace: 'nowrap',
+  mixBlendMode: 'difference',
 };
 
 export default function Header() {
@@ -146,7 +148,8 @@ export default function Header() {
             textTransform: 'uppercase',
             display: 'flex',
             alignItems: 'center',
-            cursor: 'none'
+            cursor: 'none',
+            mixBlendMode: 'difference'
           }}
         >
           Ksenyia Sujova
