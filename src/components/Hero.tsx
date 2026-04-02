@@ -191,6 +191,7 @@ export default function Hero() {
             gap: 'clamp(0.5rem, 2vw, 2rem)',
             flexWrap: 'wrap',
             justifyContent: 'center',
+            mixBlendMode: 'difference', // Restore contrast intersection effect
           }}
         >
           <span ref={span1Ref} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
