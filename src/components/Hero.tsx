@@ -148,7 +148,7 @@ export default function Hero() {
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <video
           ref={videoRef}
-          src="/hero-video-2026.mp4"
+          src="/flower-transition.mp4"
           muted
           playsInline
           onLoadedMetadata={(e) => {
