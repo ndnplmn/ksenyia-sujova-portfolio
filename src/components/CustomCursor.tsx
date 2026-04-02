@@ -157,58 +157,58 @@ export default function CustomCursor() {
 
   return (
     <>
-      <div 
-        ref={ringRef}
-        className="custom-cursor-ring"
-        style={{
-          position: 'fixed',
-          top: '-20px',
-          left: '-20px', 
-          width: '40px',
-          height: '40px',
-          borderRadius: '50%',
-          border: '1px solid rgba(26,26,46,0.3)',
-          pointerEvents: 'none',
-          zIndex: 9999998,
-          willChange: 'transform',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
         <div 
-          ref={textRef} 
-          style={{ 
-            color: '#000', 
-            fontSize: '0.6rem', 
-            fontWeight: 800,
-            opacity: 0, 
-            transform: 'scale(0.5)',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            willChange: 'opacity, transform'
+          ref={ringRef}
+          className="custom-cursor-ring"
+          style={{
+            position: 'fixed',
+            top: '-20px',
+            left: '-20px', 
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            border: '1px solid var(--surface-secondary)',
+            pointerEvents: 'none',
+            zIndex: 9999998,
+            willChange: 'transform',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          View
+          <div 
+            ref={textRef} 
+            style={{ 
+              color: 'var(--text-primary)', 
+              fontSize: '0.6rem', 
+              fontWeight: 800,
+              opacity: 0, 
+              transform: 'scale(0.5)',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              willChange: 'opacity, transform'
+            }}
+          >
+            View
+          </div>
         </div>
-      </div>
-      
-      <div 
-        ref={dotRef}
-        className="custom-cursor-dot"
-        style={{
-          position: 'fixed',
-          top: '-3px',
-          left: '-3px',
-          width: '6px',
-          height: '6px',
-          backgroundColor: 'var(--accent-lime)',
-          borderRadius: '50%',
-          pointerEvents: 'none',
-          zIndex: 9999999,
-          willChange: 'transform'
-        }}
-      />
+        
+        <div 
+          ref={dotRef}
+          className="custom-cursor-dot"
+          style={{
+            position: 'fixed',
+            top: '-3px',
+            left: '-3px',
+            width: '6px',
+            height: '6px',
+            backgroundColor: 'var(--accent-sapphire)',
+            borderRadius: '50%',
+            pointerEvents: 'none',
+            zIndex: 9999999,
+            willChange: 'transform'
+          }}
+        />
     </>
   );
 }

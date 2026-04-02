@@ -185,7 +185,7 @@ export default function Hero() {
             fontSize: 'clamp(2.5rem, 11vw, 9rem)', // Ultra-massive for 2026 impact
             fontWeight: 800,
             letterSpacing: '-0.04em',
-            color: '#1a1a2e', // Deep Obsidian for maximum contrast on white
+            color: 'var(--text-primary)',
             margin: 0,
             display: 'flex',
             gap: 'clamp(0.5rem, 2vw, 2rem)',
@@ -208,7 +208,7 @@ export default function Hero() {
             fontWeight: 500,
             letterSpacing: '0.4em',
             textTransform: 'uppercase',
-            color: 'rgba(26, 26, 46, 0.7)',
+            color: 'var(--text-secondary)',
             margin: 0,
             willChange: 'transform, opacity',
           }}

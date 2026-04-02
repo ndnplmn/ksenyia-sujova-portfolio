@@ -30,56 +30,56 @@ const ColumnView = ({ projectsArray, colRef, customStyle = {} }: { projectsArray
     }}
   >
     {projectsArray.map((project: Project, idx: number) => (
-      <div 
-        key={project.id} 
-        className="premium-card grid-item-pro"
-        data-speed={project.drift}
-        style={{ 
-          position: 'relative', 
-          width: idx % 2 === 0 ? '110%' : '90%',
-          marginLeft: project.offset,
-          overflow: 'hidden',
-          borderRadius: '24px', 
-          backgroundColor: '#e8e8ef',
-          cursor: 'none' 
-        }}
-        suppressHydrationWarning // Extra safety layer for dynamic layout
-      >
-        <div style={{ paddingBottom: idx % 3 === 0 ? '150%' : '120%' }} />
-        
-        <Image 
-          src={project.image}
-          alt={project.title}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="premium-img"
-          style={{ objectFit: 'cover', willChange: 'transform' }}
-        />
-        
         <div 
-          className="premium-overlay"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(to top, rgba(26,26,46,0.95) 0%, rgba(26,26,46,0.4) 50%, transparent 100%)',
-            color: 'var(--text-primary)',
-            opacity: 0, 
-            pointerEvents: 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            padding: '2.5vw',
-            willChange: 'opacity'
+          key={project.id} 
+          className="premium-card grid-item-pro"
+          data-speed={project.drift}
+          style={{ 
+            position: 'relative', 
+            width: idx % 2 === 0 ? '110%' : '90%',
+            marginLeft: project.offset,
+            overflow: 'hidden',
+            borderRadius: '24px', 
+            backgroundColor: 'var(--accent-ice)',
+            cursor: 'none' 
           }}
+          suppressHydrationWarning // Extra safety layer for dynamic layout
         >
-          <div style={{ fontSize: '0.85rem', color: 'var(--accent-lime)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '0.5rem', fontWeight: 700 }}>
-            {project.category}
+          <div style={{ paddingBottom: idx % 3 === 0 ? '150%' : '120%' }} />
+          
+          <Image 
+            src={project.image}
+            alt={project.title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="premium-img"
+            style={{ objectFit: 'cover', willChange: 'transform' }}
+          />
+          
+          <div 
+            className="premium-overlay"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to top, rgba(10,14,26,0.95) 0%, rgba(10,14,26,0.4) 50%, transparent 100%)',
+              color: 'var(--text-primary)',
+              opacity: 0, 
+              pointerEvents: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              padding: '2.5vw',
+              willChange: 'opacity'
+            }}
+          >
+            <div style={{ fontSize: '0.85rem', color: 'var(--accent-sapphire)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '0.5rem', fontWeight: 700 }}>
+              {project.category}
+            </div>
+            <h3 style={{ fontSize: 'clamp(1.5rem, 2.8vw, 3.5rem)', color: 'var(--bg-pure)', margin: 0, fontWeight: 300, letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+              {project.title}
+            </h3>
           </div>
-          <h3 style={{ fontSize: 'clamp(1.5rem, 2.8vw, 3.5rem)', margin: 0, fontWeight: 300, letterSpacing: '-0.03em', lineHeight: 1.1 }}>
-            {project.title}
-          </h3>
         </div>
-      </div>
     ))}
   </div>
 );

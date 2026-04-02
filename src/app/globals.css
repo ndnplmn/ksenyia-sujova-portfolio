@@ -1,16 +1,19 @@
 :root {
-  /* Light Mode — Primary palette */
-  --bg-primary: #dee3e9;
-  --bg-pure: #dee3e9;
-  --surface-secondary: #c8c8d4;
+  /* Pinnacle Sapphire 2026 — Primary Palette */
+  --bg-primary: #FFFFFF;
+  --bg-pure: #FFFFFF;
+  --surface-secondary: #E2E8F0;
 
-  /* Text colors */
-  --text-primary: #1a1a2e;
-  --text-secondary: #4a4a5a;
-  --text-inverse: #f4f4f9;
+  /* Text & Typography — Midnight Ink Standard */
+  --text-primary: #0A0E1A;
+  --text-secondary: #6B7C93;
+  --text-inverse: #FFFFFF;
 
-  --accent-lime: #96C0D4;
-  --accent-mist: #7AABC0;
+  /* Accents — Sapphire & Aura */
+  --accent-sapphire: #0033FF;
+  --accent-ice: #F0F4FF;
+  --accent-powder: #B8CFFF;
+  --accent-powder-blue: #B8CFFF; /* Alias for compatibility */
 
   --ease-fluid: cubic-bezier(0.7, 0, 0.3, 1);
   --ease-magnetic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -81,8 +84,8 @@ body::before {
   inset: 0;
   z-index: 9999998;
   pointer-events: none;
-  background: radial-gradient(circle at center, transparent 0%, rgba(26,26,46,0.02) 70%, rgba(26,26,46,0.15) 100%);
-  box-shadow: inset 0 0 150px rgba(26,26,46,0.1);
+  background: radial-gradient(circle at center, transparent 0%, rgba(10,14,26,0.01) 70%, rgba(10,14,26,0.08) 100%);
+  box-shadow: inset 0 0 150px rgba(10,14,26,0.05);
 }
 
 
@@ -128,7 +131,7 @@ a {
   left: 0;
   width: 12px;
   height: 12px;
-  background-color: var(--accent-lime);
+  background-color: var(--accent-sapphire);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;

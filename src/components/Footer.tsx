@@ -96,7 +96,7 @@ export default function Footer() {
       role="contentinfo"
       style={{
         padding: '12vw 5%',
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--bg-pure)',
         display: 'flex',
         flexDirection: 'column',
         gap: '8vh',
@@ -105,7 +105,7 @@ export default function Footer() {
         overflow: 'hidden'
       }}
     >
-      {/* Interactive Background Aura */}
+      {/* Interactive Background Aura - Sapphire Pulse */}
       <div 
         ref={auraRef}
         className="footer-aura"
@@ -113,7 +113,7 @@ export default function Footer() {
           position: 'absolute',
           width: '60vw',
           height: '60vw',
-          background: 'radial-gradient(circle, rgba(150, 192, 212, 0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, var(--accent-ice) 0%, transparent 70%)',
           borderRadius: '50%',
           pointerEvents: 'none',
           transform: 'translate(-50%, -50%)',
@@ -165,15 +165,15 @@ export default function Footer() {
                 width: '100%',
                 background: 'transparent',
                 border: 'none',
-                borderBottom: '2px solid rgba(26, 26, 46, 0.1)',
+                borderBottom: '2px solid var(--surface-secondary)',
                 color: 'var(--text-primary)',
                 padding: '1.5rem 0',
                 fontSize: '1.5rem',
                 outline: 'none',
                 transition: 'border-bottom-color 0.5s var(--ease-fluid)'
               }}
-              onFocus={(e) => e.currentTarget.style.borderBottomColor = 'var(--text-primary)'}
-              onBlur={(e) => e.currentTarget.style.borderBottomColor = 'rgba(26, 26, 46, 0.1)'}
+              onFocus={(e) => e.currentTarget.style.borderBottomColor = 'var(--accent-sapphire)'}
+              onBlur={(e) => e.currentTarget.style.borderBottomColor = 'var(--surface-secondary)'}
             />
             <label 
               htmlFor="name" 
@@ -197,15 +197,15 @@ export default function Footer() {
                 width: '100%',
                 background: 'transparent',
                 border: 'none',
-                borderBottom: '2px solid rgba(26, 26, 46, 0.1)',
+                borderBottom: '2px solid var(--surface-secondary)',
                 color: 'var(--text-primary)',
                 padding: '1.5rem 0',
                 fontSize: '1.5rem',
                 outline: 'none',
                 transition: 'border-bottom-color 0.5s var(--ease-fluid)'
               }}
-              onFocus={(e) => e.currentTarget.style.borderBottomColor = 'var(--text-primary)'}
-              onBlur={(e) => e.currentTarget.style.borderBottomColor = 'rgba(26, 26, 46, 0.1)'}
+              onFocus={(e) => e.currentTarget.style.borderBottomColor = 'var(--accent-sapphire)'}
+              onBlur={(e) => e.currentTarget.style.borderBottomColor = 'var(--surface-secondary)'}
             />
             <label 
               htmlFor="email" 
@@ -226,7 +226,7 @@ export default function Footer() {
             style={{
               alignSelf: 'flex-start',
               background: 'var(--text-primary)',
-              color: '#ffffff',
+              color: 'var(--bg-pure)',
               border: 'none',
               borderRadius: '100px',
               padding: '0',
@@ -247,13 +247,13 @@ export default function Footer() {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.width = '320px';
-              e.currentTarget.style.background = '#96C0D4';
-              e.currentTarget.style.color = '#1a1a2e';
+              e.currentTarget.style.background = 'var(--accent-sapphire)';
+              e.currentTarget.style.color = 'var(--bg-pure)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.width = '80px';
               e.currentTarget.style.background = 'var(--text-primary)';
-              e.currentTarget.style.color = '#ffffff';
+              e.currentTarget.style.color = 'var(--bg-pure)';
             }}
           >
             <span style={{ 
@@ -305,7 +305,7 @@ export default function Footer() {
         .input-group input:focus + label,
         .input-group input:not(:placeholder-shown) + label {
           transform: translateY(-2.5rem) scale(0.85);
-          color: #96C0D4;
+          color: var(--accent-sapphire);
         }
         .morphing-submit:hover .btn-text {
           opacity: 1 !important;

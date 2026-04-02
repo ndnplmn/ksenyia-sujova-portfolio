@@ -116,7 +116,7 @@ export default function Preloader() {
           width: '400px',
           height: '400px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(150, 192, 212, 0.4) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, var(--accent-ice) 0%, transparent 70%)',
           filter: 'url(#fluid-aura)',
           willChange: 'transform, opacity'
         }}
@@ -130,7 +130,8 @@ export default function Preloader() {
             fontSize: '4.5rem',
             fontWeight: 900,
             letterSpacing: '-0.05em',
-            color: 'rgba(26, 26, 46, 0.6)',
+            color: 'var(--text-primary)',
+            opacity: 0.6,
             willChange: 'transform, opacity'
           }}
         >
@@ -144,7 +145,7 @@ export default function Preloader() {
             fontSize: '0.85rem',
             fontWeight: 600,
             letterSpacing: '0.5em',
-            WebkitTextStroke: '1px rgba(26, 26, 46, 0.08)',
+            WebkitTextStroke: '1px var(--surface-secondary)',
             color: 'var(--text-secondary)',
             display: 'flex',
             justifyContent: 'center',

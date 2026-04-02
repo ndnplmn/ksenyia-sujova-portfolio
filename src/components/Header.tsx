@@ -158,8 +158,8 @@ export default function Header() {
              const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
              
              // Minimalist expansion: Subtle, elegant, typographical
-             gsap.to(k, { x: -5, color: 'var(--accent-powder-blue)', duration: 0.5, ease: 'power3.out' });
-             gsap.to(s, { x: 5, color: 'var(--accent-powder-blue)', duration: 0.5, ease: 'power3.out' });
+             gsap.to(k, { x: -5, color: 'var(--accent-sapphire)', duration: 0.5, ease: 'power3.out' });
+             gsap.to(s, { x: 5, color: 'var(--accent-sapphire)', duration: 0.5, ease: 'power3.out' });
              
              gsap.to(rest, { 
                opacity: 1, 
@@ -228,7 +228,7 @@ export default function Header() {
               onClick={(e) => handleLinkClick(e, link.href)}
               style={inlineLinkStyle}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--text-primary)';
+                e.currentTarget.style.color = 'var(--accent-sapphire)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = 'var(--text-secondary)';
@@ -252,16 +252,16 @@ export default function Header() {
               transition: 'background-color 0.4s ease, border-color 0.4s ease',
               display: 'flex',
               justifyContent: 'center',
-              background: 'rgba(255, 255, 255, 0.05)',
+              background: 'rgba(0, 0, 0, 0.02)',
               backdropFilter: 'blur(10px)',
             }}
             data-magnetic-target
             onMouseEnter={(e) => {
               gsap.to(e.currentTarget, { 
                 width: '180px', 
-                backgroundColor: 'var(--text-primary)', 
+                backgroundColor: 'var(--accent-sapphire)', 
                 color: 'var(--bg-pure)',
-                borderColor: 'var(--text-primary)',
+                borderColor: 'var(--accent-sapphire)',
                 duration: 0.5, 
                 ease: 'expo.out' 
               });

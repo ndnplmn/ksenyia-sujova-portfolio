@@ -121,15 +121,15 @@ export default function ExperienceTimeline() {
       id="experience"
       className="timeline-section"
       style={{ 
-        backgroundColor: '#ffffff',
-        color: '#1a1a2e',
+        backgroundColor: 'var(--bg-pure)',
+        color: 'var(--text-primary)',
         height: '100vh',
         overflow: 'hidden',
         position: 'relative',
         zIndex: 10
       }}
     >
-      {/* Background Cinematic Aura */}
+      {/* Background Cinematic Aura - Sapphire Blend */}
       <div 
         className="timeline-aura"
         style={{
@@ -139,7 +139,7 @@ export default function ExperienceTimeline() {
           transform: 'translate(-50%, -50%)',
           width: '80vw',
           height: '80vh',
-          background: 'radial-gradient(circle, rgba(176, 196, 222, 0.2) 0%, rgba(255, 255, 255, 0) 70%)',
+          background: 'radial-gradient(circle, var(--accent-ice) 0%, transparent 70%)',
           filter: 'blur(80px)',
           pointerEvents: 'none',
           zIndex: 0
@@ -154,7 +154,7 @@ export default function ExperienceTimeline() {
           fontSize: '0.7rem', 
           letterSpacing: '0.4em', 
           textTransform: 'uppercase',
-          color: 'rgba(26, 26, 46, 0.7)',
+          color: 'var(--text-secondary)',
           zIndex: 100,
           margin: 0
         }}
@@ -182,7 +182,7 @@ export default function ExperienceTimeline() {
               visibility: index === 0 ? 'visible' : 'hidden',
             }}
           >
-            {/* Background Year - High Density Parallax */}
+            {/* Background Year - Sapphire Stroke */}
             <div 
               className="huge-year-bg"
               style={{
@@ -193,7 +193,7 @@ export default function ExperienceTimeline() {
                 fontSize: 'clamp(10rem, 30vw, 35rem)',
                 fontWeight: 900,
                 color: 'transparent',
-                WebkitTextStroke: '1px rgba(26, 26, 46, 0.12)',
+                WebkitTextStroke: '1px var(--surface-secondary)',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
                 zIndex: 1,
@@ -228,7 +228,7 @@ export default function ExperienceTimeline() {
                   fontSize: '0.9rem', 
                   fontWeight: 600, 
                   fontFamily: 'monospace',
-                  color: '#b0c4de',
+                  color: 'var(--accent-powder)',
                   marginTop: '0.5rem'
                 }}>
                   {String(index + 1).padStart(2, '0')}
@@ -240,7 +240,7 @@ export default function ExperienceTimeline() {
                     fontWeight: 800, 
                     lineHeight: 0.9, 
                     textTransform: 'uppercase',
-                    color: '#1a1a2e',
+                    color: 'var(--text-primary)',
                     letterSpacing: '-0.03em'
                   }}>
                     {exp.role}
@@ -254,20 +254,20 @@ export default function ExperienceTimeline() {
                     <span style={{ 
                       fontSize: 'clamp(1rem, 2vw, 1.5rem)', 
                       fontWeight: 500,
-                      color: 'rgba(26, 26, 46, 0.6)' 
+                      color: 'var(--text-secondary)' 
                     }}>
                       @ {exp.company}
                     </span>
                     <span style={{
                       width: '40px',
                       height: '1px',
-                      backgroundColor: '#b0c4de'
+                      backgroundColor: 'var(--surface-secondary)'
                     }} />
                     <span style={{
                       fontSize: '0.8rem',
                       fontWeight: 600,
                       letterSpacing: '0.2em',
-                      color: '#b0c4de'
+                      color: 'var(--accent-sapphire)'
                     }}>
                       {exp.year}
                     </span>
@@ -278,7 +278,8 @@ export default function ExperienceTimeline() {
               <p style={{ 
                 fontSize: 'clamp(1.1rem, 1.5vw, 1.4rem)', 
                 lineHeight: 1.5, 
-                color: 'rgba(26, 26, 46, 0.8)', 
+                color: 'var(--text-primary)', 
+                opacity: 0.8,
                 maxWidth: '550px', 
                 margin: 0,
                 marginLeft: '3.5rem',
@@ -300,7 +301,8 @@ export default function ExperienceTimeline() {
           transform: 'translateY(-50%)',
           height: '20vh',
           width: '2px',
-          backgroundColor: 'rgba(26, 26, 46, 0.05)',
+          backgroundColor: 'var(--surface-secondary)',
+          opacity: 0.3,
           zIndex: 100
         }}
       >
@@ -309,7 +311,7 @@ export default function ExperienceTimeline() {
           style={{ 
             width: '100%', 
             height: '0%', 
-            backgroundColor: '#1a1a2e',
+            backgroundColor: 'var(--accent-sapphire)',
             transition: 'height 0.1s linear'
           }} 
         />
@@ -320,7 +322,7 @@ export default function ExperienceTimeline() {
           transform: 'translateX(-50%)',
           fontSize: '0.6rem',
           fontWeight: 900,
-          color: '#b0c4de',
+          color: 'var(--accent-powder)',
           writingMode: 'vertical-rl',
           letterSpacing: '0.2em'
         }}>
