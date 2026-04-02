@@ -48,54 +48,48 @@ export default function ExperienceTimeline() {
       const milestones = gsap.utils.toArray('.milestone-panel') as HTMLElement[];
       const totalMilestones = milestones.length;
       
-      // Pin the entire section
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: () => `+=${totalMilestones * 100}%`,
-        pin: true,
-        scrub: true,
-        anticipatePin: 1,
+      // 1. One Master Timeline for all transitions
+      const masterTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: () => `+=${totalMilestones * 100}%`,
+          pin: true,
+          scrub: true,
+          anticipatePin: 1,
+        }
       });
 
-      // Initial state: hide all except the first milestone
+      // 2. Initial state: hide all except the first milestone
       milestones.forEach((panel, i) => {
         gsap.set(panel, { 
           autoAlpha: i === 0 ? 1 : 0, 
-          y: i === 0 ? 0 : 100,
-          scale: i === 0 ? 1 : 0.9
+          y: i === 0 ? 0 : 80,
+          scale: i === 0 ? 1 : 0.95
         });
       });
 
-      // Individual transitions per milestone scroll step
+      // 3. Sequentially add milestone transitions to the master timeline
+      // Each transition takes '1 unit' of the timeline.
       milestones.forEach((panel, i) => {
         if (i === 0) return;
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: () => `${(i / totalMilestones) * 100}% top`,
-            end: () => `${((i + 1) / totalMilestones) * 100}% top`,
-            scrub: true,
-          }
-        });
-
-        // Exit previous, enter current
-        tl.to(milestones[i - 1], { 
+        // Transition out of previous slide and into current slide
+        masterTl.to(milestones[i - 1], { 
           autoAlpha: 0, 
-          y: -100, 
-          scale: 0.9, 
+          y: -80, 
+          scale: 0.95, 
           duration: 1 
-        }, 0)
+        }, i - 0.5) // Adjust timing to create a clean crossfade
         .to(panel, { 
           autoAlpha: 1, 
           y: 0, 
           scale: 1, 
           duration: 1 
-        }, 0);
+        }, i - 0.5);
       });
 
-      // Kinetic Progress Bar
+      // 4. Kinetic Progress Bar tied to the same scroll
       gsap.to('.progress-fill', {
         height: '100%',
         ease: 'none',
@@ -107,10 +101,10 @@ export default function ExperienceTimeline() {
         }
       });
 
-      // Background Aura pulsing
+      // 5. Background Aura pulsing
       gsap.to('.timeline-aura', {
         scale: 1.2,
-        opacity: 0.4,
+        opacity: 0.35,
         duration: 5,
         repeat: -1,
         yoyo: true,
