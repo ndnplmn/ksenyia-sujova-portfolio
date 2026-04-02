@@ -142,19 +142,35 @@ export default function Header() {
             textDecoration: 'none',
             color: 'var(--text-primary)',
             cursor: 'none',
-            position: 'relative'
+            position: 'relative',
+            zIndex: 10
           }}
           data-magnetic-target
           onMouseEnter={(e) => {
-             const pill = e.currentTarget.querySelector('.logo-pill');
+             const pill = e.currentTarget.querySelector('.logo-pill') as HTMLElement;
              const k = e.currentTarget.querySelector('.logo-k');
              const s = e.currentTarget.querySelector('.logo-s');
              const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
              
-             gsap.to(pill, { width: '190px', backgroundColor: 'var(--bg-pure)', borderColor: 'var(--accent-powder-blue)', boxShadow: '0 0 25px rgba(150, 192, 212, 0.25)', duration: 0.6, ease: 'expo.out' });
-             gsap.to(k, { x: -75, color: 'var(--accent-powder-blue)', duration: 0.6, ease: 'expo.out' });
-             gsap.to(s, { x: -10, color: 'var(--accent-powder-blue)', duration: 0.6, ease: 'expo.out' });
-             gsap.to(rest, { opacity: 1, x: 0, stagger: 0.05, duration: 0.5, delay: 0.1, ease: 'power3.out' });
+             // 2026 Liquid Morph: Scale slightly first, then stretch
+             gsap.to(pill, { 
+               width: '210px', 
+               backgroundColor: 'var(--bg-pure)', 
+               borderColor: 'var(--accent-powder-blue)', 
+               boxShadow: '0 10px 40px rgba(150, 192, 212, 0.4)', 
+               duration: 0.8, 
+               ease: 'elastic.out(1, 0.75)' 
+             });
+             
+             // Letter physics: offset in 3D/Position
+             gsap.to(k, { x: -82, y: -1, rotate: -5, color: 'var(--accent-powder-blue)', duration: 0.7, ease: 'power4.out' });
+             gsap.to(s, { x: -7, y: 1, rotate: 5, color: 'var(--accent-powder-blue)', duration: 0.7, ease: 'power4.out' });
+             
+             // Unfurling reveal: Bloom effect from center
+             gsap.fromTo(rest, 
+               { opacity: 0, x: (idx) => idx === 0 ? 30 : 15, scale: 0.8, filter: 'blur(10px)' },
+               { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', stagger: 0.08, duration: 0.6, delay: 0.1, ease: 'back.out(1.7)' }
+             );
           }}
           onMouseLeave={(e) => {
              const pill = e.currentTarget.querySelector('.logo-pill');
@@ -162,9 +178,17 @@ export default function Header() {
              const s = e.currentTarget.querySelector('.logo-s');
              const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
  
-             gsap.to(pill, { width: '45px', backgroundColor: 'transparent', borderColor: 'var(--surface-secondary)', boxShadow: 'none', duration: 0.6, ease: 'expo.inOut' });
-             gsap.to([k, s], { x: 0, color: 'var(--text-primary)', duration: 0.6, ease: 'expo.inOut' });
-             gsap.to(rest, { opacity: 0, x: 10, duration: 0.4, ease: 'power2.in' });
+             gsap.to(pill, { 
+               width: '45px', 
+               backgroundColor: 'rgba(255, 255, 255, 0.05)', 
+               borderColor: 'rgba(26, 26, 46, 0.1)', 
+               boxShadow: 'none', 
+               duration: 0.6, 
+               ease: 'expo.inOut' 
+             });
+             
+             gsap.to([k, s], { x: 0, y: 0, rotate: 0, color: 'var(--text-primary)', duration: 0.6, ease: 'expo.inOut' });
+             gsap.to(rest, { opacity: 0, x: 10, scale: 0.9, filter: 'blur(5px)', duration: 0.4, ease: 'power2.in' });
           }}
         >
           <div
@@ -173,22 +197,59 @@ export default function Header() {
               width: '45px',
               height: '45px',
               borderRadius: '999px',
-              border: '1px solid var(--surface-secondary)',
+              border: '1px solid rgba(26, 26, 46, 0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               overflow: 'hidden',
               position: 'relative',
+              background: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(20px) saturate(180%)',
               transition: 'border-color 0.4s ease',
-              willChange: 'width, background-color, box-shadow'
+              willChange: 'width, background-color, box-shadow, transform'
             }}
           >
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-              <span className="logo-k" style={{ position: 'absolute', fontWeight: 900, fontSize: '1rem', willChange: 'transform, color' }}>K</span>
-              <span className="logo-name-rest" style={{ position: 'absolute', left: '26px', opacity: 0, fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.02em', whiteSpace: 'nowrap', transform: 'translateX(10px)' }}>senyia</span>
+              <span className="logo-k" style={{ 
+                position: 'absolute', 
+                fontWeight: 900, 
+                fontSize: '1.1rem', 
+                letterSpacing: '-0.05em',
+                willChange: 'transform, color, rotate' 
+              }}>K</span>
               
-              <span className="logo-s" style={{ position: 'absolute', fontWeight: 900, fontSize: '1rem', willChange: 'transform, color', marginLeft: '1.2em' }}>S</span>
-              <span className="logo-name-rest" style={{ position: 'absolute', left: '108px', opacity: 0, fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.02em', whiteSpace: 'nowrap', transform: 'translateX(10px)' }}>ujova</span>
+              <span className="logo-name-rest" style={{ 
+                position: 'absolute', 
+                left: '32px', 
+                opacity: 0, 
+                fontWeight: 800, 
+                fontSize: '0.8rem', 
+                letterSpacing: '0.05em', 
+                whiteSpace: 'nowrap', 
+                color: 'var(--text-primary)',
+                textTransform: 'uppercase'
+              }}>senyia</span>
+              
+              <span className="logo-s" style={{ 
+                position: 'absolute', 
+                fontWeight: 900, 
+                fontSize: '1.1rem', 
+                letterSpacing: '-0.05em',
+                marginLeft: '1.3em',
+                willChange: 'transform, color, rotate' 
+              }}>S</span>
+              
+              <span className="logo-name-rest" style={{ 
+                position: 'absolute', 
+                left: '122px', 
+                opacity: 0, 
+                fontWeight: 800, 
+                fontSize: '0.8rem', 
+                letterSpacing: '0.05em', 
+                whiteSpace: 'nowrap', 
+                color: 'var(--text-primary)',
+                textTransform: 'uppercase'
+              }}>ujova</span>
             </div>
           </div>
         </Link>
