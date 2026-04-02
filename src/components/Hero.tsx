@@ -170,34 +170,34 @@ export default function Hero() {
         className="hero-content"
         style={{
           position: 'relative',
-          zIndex: 2,
           textAlign: 'center',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '2rem',
+          mixBlendMode: 'difference', // Move to container to bypass child isolation
+          pointerEvents: 'none', // Allow mouse to hit video for any interaction
         }}
       >
         <h1
           id="hero-heading"
           className="kinetic-text"
           style={{
-            fontSize: 'clamp(2.5rem, 11vw, 9rem)', // Ultra-massive for 2026 impact
+            fontSize: 'clamp(2.5rem, 11vw, 9rem)', 
             fontWeight: 800,
             letterSpacing: '-0.04em',
-            color: '#FFFFFF',
+            color: '#FFFFFF', // White renders as Black on White background via 'difference'
             margin: 0,
             display: 'flex',
             gap: 'clamp(0.5rem, 2vw, 2rem)',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            mixBlendMode: 'difference', // Restore contrast intersection effect
           }}
         >
-          <span ref={span1Ref} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
+          <span ref={span1Ref} style={{ display: 'inline-block' }}>
             DESIGN.
           </span>
-          <span ref={span2Ref} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
+          <span ref={span2Ref} style={{ display: 'inline-block' }}>
             ART.
           </span>
         </h1>
@@ -209,7 +209,7 @@ export default function Hero() {
             fontWeight: 500,
             letterSpacing: '0.4em',
             textTransform: 'uppercase',
-            color: 'var(--text-secondary)',
+            color: '#FFFFFF',
             margin: 0,
             willChange: 'transform, opacity',
           }}
