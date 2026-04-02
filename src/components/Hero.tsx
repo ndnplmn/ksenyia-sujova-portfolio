@@ -190,7 +190,7 @@ export default function Hero() {
             fontSize: 'clamp(2rem, 11vw, 9rem)', 
             fontWeight: 800,
             letterSpacing: '-0.04em',
-            color: '#FDA98E', // Mathematical inverse of #025671
+            color: '#934327', // Mathematical inverse of #6cbcd8
             margin: 0,
             display: 'flex',
             gap: 'clamp(0.5rem, 2vw, 2rem)',
@@ -213,7 +213,7 @@ export default function Hero() {
             fontWeight: 500,
             letterSpacing: '0.4em',
             textTransform: 'uppercase',
-            color: '#FDA98E', // Consistent inverted base
+            color: '#934327', // Mathematical inverse of #6cbcd8
             margin: 0,
             willChange: 'transform, opacity',
           }}
