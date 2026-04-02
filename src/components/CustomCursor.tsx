@@ -90,6 +90,7 @@ export default function CustomCursor() {
         backgroundColor: '#ffffff', 
         borderColor: 'transparent',
         mixBlendMode: 'difference',
+        filter: 'drop-shadow(2px 0 0px rgba(255,0,0,0.8)) drop-shadow(-2px 0 0px rgba(0,255,255,0.8))',
         duration: 0.5, 
         ease: 'power4.out' 
       });
@@ -108,8 +109,9 @@ export default function CustomCursor() {
       gsap.to(ring, { 
         scale: 1, 
         backgroundColor: 'transparent', 
-        borderColor: 'rgba(26,26,46,0.3)',
+        borderColor: 'var(--surface-secondary)',
         mixBlendMode: 'normal',
+        filter: 'drop-shadow(0 0 0 transparent)',
         duration: 0.5, 
         ease: 'power4.out' 
       });

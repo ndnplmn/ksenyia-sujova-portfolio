@@ -3,6 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const inlineLinks = [
   { name: 'Work', href: '#work' },
@@ -46,6 +51,20 @@ export default function Header() {
   const linksWrapRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
+    // Phase 2: Variable Typography Dynamics
+    const logoTxt = document.querySelector('.brand-name-dynamic');
+    if (logoTxt) {
+      gsap.to(logoTxt, {
+        fontWeight: 100, // Shift from 800 (style) to 100 on scroll
+        scrollTrigger: {
+          trigger: 'body',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1
+        }
+      });
+    }
+
     if (!menuRef.current) return;
 
     if (menuOpen) {
@@ -143,7 +162,7 @@ export default function Header() {
             textDecoration: 'none', 
             color: 'var(--text-primary)', 
             fontSize: '1rem', 
-            fontWeight: 700, 
+            fontWeight: 800, 
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
             display: 'flex',
@@ -152,7 +171,7 @@ export default function Header() {
             mixBlendMode: 'difference'
           }}
         >
-          Ksenyia Sujova
+          <span className="brand-name-dynamic">Ksenyia Sujova</span>
         </Link>
  
         {/* Desktop: centered nav links */}

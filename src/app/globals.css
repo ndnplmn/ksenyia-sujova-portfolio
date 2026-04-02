@@ -1,10 +1,10 @@
 :root {
   /* 2026 Pinnacle Sapphire - Recalibrated Palette */
-  --bg-pure: #FFFFFF;
-  --bg-primary: #FFFFFF;
-  --accent-sapphire: #67bed9; /* User preferred Cyan-Sapphire */
-  --accent-powder: #E0F2F7;   /* Adjusted for harmony with #67bed9 */
-  --accent-ice: #F0F9FB;      /* Ultra-soft cyan tint */
+  --bg-pure: #ffffff;
+  --bg-primary: #fcfcfc;
+  --accent-sapphire: #67bed9;
+  --accent-powder: #B8CFFF;
+  --accent-ice: #f0f7f9;
   --text-primary: #025671;    /* User preferred Teal-Midnight Ink */
   --text-secondary: rgba(2, 86, 113, 0.7);
   --text-inverse: #FFFFFF;
@@ -12,7 +12,7 @@
   --selection-bg: #67bed9;
   --selection-text: #FFFFFF;
 
-  --ease-fluid: cubic-bezier(0.7, 0, 0.3, 1);
+  --ease-fluid: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-magnetic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 

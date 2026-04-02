@@ -14,6 +14,7 @@ interface Project {
   image: string;
   drift: number;
   offset: string;
+  tags: string[];
 }
 
 const ColumnView = ({ projectsArray, colRef, customStyle = {} }: { projectsArray: Project[], colRef: React.RefObject<HTMLDivElement | null>, customStyle?: React.CSSProperties }) => (
@@ -75,9 +76,29 @@ const ColumnView = ({ projectsArray, colRef, customStyle = {} }: { projectsArray
             <div style={{ fontSize: '0.85rem', color: 'var(--accent-sapphire)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '0.5rem', fontWeight: 700 }}>
               {project.category}
             </div>
-            <h3 style={{ fontSize: 'clamp(1.5rem, 2.8vw, 3.5rem)', color: 'var(--bg-pure)', margin: 0, fontWeight: 300, letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+            <h3 style={{ fontSize: 'clamp(1.5rem, 2.8vw, 3.5rem)', color: 'var(--bg-pure)', margin: 0, fontWeight: 300, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '1.5rem' }}>
               {project.title}
             </h3>
+            <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+              {project.tags.map(tag => (
+                <span 
+                  key={tag} 
+                  className="tech-tag"
+                  style={{ 
+                    fontSize: '0.65rem', 
+                    padding: '0.3rem 0.8rem', 
+                    border: '1px solid rgba(255,255,255,0.2)', 
+                    borderRadius: '99px',
+                    color: 'rgba(255,255,255,0.7)',
+                    letterSpacing: '0.1em',
+                    fontWeight: 600,
+                    opacity: 0
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
     ))}
@@ -99,13 +120,16 @@ export default function PortfolioGrid() {
       const drift = 0.6 + ((i * 7) % 13) / 10;
       const offsetValue = ((i * 11) % 21) - 10;
       
+      const tags = i % 3 === 0 ? ['GLSL', 'THREE.JS', 'GSAP'] : i % 3 === 1 ? 'NEXT.JS/UI'.split('/') : ['MOTION', 'AFTER EFFECTS'];
+      
       return {
         id: i,
         title: `PROJECT ${String(i + 1).padStart(3, '00')}`,
         category: i % 3 === 0 ? 'Digital Art' : i % 3 === 1 ? 'UI/UX Design' : 'Motion',
         image: `https://picsum.photos/seed/${i + 800}/800/1000`,
         drift: drift,
-        offset: `${offsetValue}%`
+        offset: `${offsetValue}%`,
+        tags: tags
       };
     });
 
@@ -165,6 +189,11 @@ export default function PortfolioGrid() {
         card.addEventListener('mouseenter', () => {
           gsap.to(img, { scale: 1.1, duration: 0.8, ease: 'power4.out' });
           gsap.to(overlay, { opacity: 1, duration: 0.5, ease: 'power2.out' });
+          const tags = card.querySelectorAll('.tech-tag');
+          gsap.fromTo(tags, 
+            { y: 20, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(1.7)', delay: 0.2 }
+          );
         });
         
         card.addEventListener('mouseleave', () => {
