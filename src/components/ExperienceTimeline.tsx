@@ -150,7 +150,7 @@ export default function ExperienceTimeline() {
           fontSize: '0.7rem', 
           letterSpacing: '0.4em', 
           textTransform: 'uppercase',
-          color: 'rgba(26, 26, 46, 0.4)',
+          color: 'rgba(26, 26, 46, 0.7)',
           zIndex: 100,
           margin: 0
         }}
@@ -186,7 +186,7 @@ export default function ExperienceTimeline() {
                 fontSize: 'clamp(10rem, 30vw, 35rem)',
                 fontWeight: 900,
                 color: 'transparent',
-                WebkitTextStroke: '1px rgba(26, 26, 46, 0.03)',
+                WebkitTextStroke: '1px rgba(26, 26, 46, 0.12)',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
                 zIndex: 1,

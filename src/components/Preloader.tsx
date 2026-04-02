@@ -130,7 +130,7 @@ export default function Preloader() {
             fontSize: '4.5rem',
             fontWeight: 900,
             letterSpacing: '-0.05em',
-            color: 'var(--text-primary)',
+            color: 'rgba(26, 26, 46, 0.6)',
             willChange: 'transform, opacity'
           }}
         >
@@ -144,7 +144,7 @@ export default function Preloader() {
             fontSize: '0.85rem',
             fontWeight: 600,
             letterSpacing: '0.5em',
-            textTransform: 'uppercase',
+            WebkitTextStroke: '1px rgba(26, 26, 46, 0.08)',
             color: 'var(--text-secondary)',
             display: 'flex',
             justifyContent: 'center',
@@ -153,7 +153,7 @@ export default function Preloader() {
             overflow: 'hidden'
           }}
         >
-           <span style={{ display: 'inline-block', width: '3ch', textAlign: 'right' }}>{percent}</span>
+           <span style={{ display: 'inline-block', minWidth: '4ch', textAlign: 'right' }}>{percent}</span>
            <span>%</span>
         </div>
       </div>

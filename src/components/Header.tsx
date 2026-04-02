@@ -37,6 +37,8 @@ const pillStyle: React.CSSProperties = {
 };
 
 export default function Header() {
+  const [contactText, setContactText] = useState('Contact');
+  const contactTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const linksWrapRef = useRef<HTMLUListElement>(null);
@@ -93,6 +95,25 @@ export default function Header() {
     }
   };
 
+  const handleContactClick = () => {
+    navigator.clipboard.writeText('ks@sujova.design');
+    setContactText('Copied!');
+    
+    if (contactTimeoutRef.current) clearTimeout(contactTimeoutRef.current);
+    contactTimeoutRef.current = setTimeout(() => {
+      // Only revert if we are still hovering (indicated by width) or just let it stay until leave
+      // Actually, safest is to just set it to the email if still hovered, or Contact if not.
+      // But let's keep it simple: after 1.5s, if we're not in the process of leaving, 
+      // stay on email or go back to contact.
+      const el = document.querySelector('.contact-pill') as HTMLElement;
+      if (el && el.offsetWidth > 120) {
+        setContactText('ks@sujova.design');
+      } else {
+        setContactText('Contact');
+      }
+    }, 1500);
+  };
+
   return (
     <>
       <header
@@ -140,7 +161,7 @@ export default function Header() {
              const k = e.currentTarget.querySelector('.logo-k');
              const s = e.currentTarget.querySelector('.logo-s');
              const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
-
+ 
              gsap.to(pill, { width: '45px', backgroundColor: 'transparent', borderColor: 'var(--surface-secondary)', boxShadow: 'none', duration: 0.6, ease: 'expo.inOut' });
              gsap.to([k, s], { x: 0, color: 'var(--text-primary)', duration: 0.6, ease: 'expo.inOut' });
              gsap.to(rest, { opacity: 0, x: 10, duration: 0.4, ease: 'power2.in' });
@@ -171,7 +192,7 @@ export default function Header() {
             </div>
           </div>
         </Link>
-
+ 
         {/* Desktop: centered nav links */}
         <nav
           className="desktop-nav"
@@ -202,36 +223,11 @@ export default function Header() {
             </a>
           ))}
         </nav>
-
+ 
         {/* Desktop: Morphing Contact Capsule (2026 Pinnacle) */}
         <div style={{ position: 'relative' }}>
           <button
-            onClick={() => {
-              navigator.clipboard.writeText('ks@sujova.design');
-              const el = document.querySelector('.contact-pill-text');
-              if (el) {
-                gsap.to(el, { 
-                  opacity: 0, 
-                  y: -5, 
-                  duration: 0.2, 
-                  onComplete: () => {
-                    el.textContent = 'Copied!';
-                    gsap.fromTo(el, { y: 5 }, { y: 0, opacity: 1, duration: 0.3, ease: 'back.out(2)' });
-                    setTimeout(() => {
-                      gsap.to(el, { 
-                        opacity: 0, 
-                        y: -5, 
-                        duration: 0.2, 
-                        onComplete: () => {
-                          el.textContent = 'ks@sujova.design'; // Stay on email while hovered
-                          gsap.fromTo(el, { y: 5 }, { y: 0, opacity: 1, duration: 0.3 });
-                        }
-                      });
-                    }, 1500);
-                  }
-                });
-              }
-            }}
+            onClick={handleContactClick}
             className="desktop-nav contact-pill"
             style={{
               ...pillStyle,
@@ -254,18 +250,7 @@ export default function Header() {
                 duration: 0.5, 
                 ease: 'expo.out' 
               });
-              const text = e.currentTarget.querySelector('.contact-pill-text');
-              if (text) {
-                gsap.to(text, { 
-                  opacity: 0, 
-                  y: -5, 
-                  duration: 0.2, 
-                  onComplete: () => {
-                    text.textContent = 'ks@sujova.design';
-                    gsap.fromTo(text, { y: 5 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
-                  } 
-                });
-              }
+              setContactText('ks@sujova.design');
             }}
             onMouseLeave={(e) => {
               gsap.to(e.currentTarget, { 
@@ -276,22 +261,12 @@ export default function Header() {
                 duration: 0.5, 
                 ease: 'expo.inOut' 
               });
-              const text = e.currentTarget.querySelector('.contact-pill-text');
-              if (text) {
-                gsap.to(text, { 
-                  opacity: 0, 
-                  y: 5, 
-                  duration: 0.2, 
-                  onComplete: () => {
-                    text.textContent = 'Contact';
-                    gsap.fromTo(text, { y: -5 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
-                  } 
-                });
-              }
+              setContactText('Contact');
+              if (contactTimeoutRef.current) clearTimeout(contactTimeoutRef.current);
             }}
           >
             <span className="contact-pill-text" style={{ position: 'relative', zIndex: 1, willChange: 'transform, opacity' }}>
-              Contact
+              {contactText}
             </span>
           </button>
         </div>
