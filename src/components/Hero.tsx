@@ -55,10 +55,9 @@ export default function Hero() {
           });
         }
 
-        // Overlay: phase 0.1→0.6 — fade out (reveal video)
+        // Overlay: completely removed initial veil for immediate impact
         if (overlayRef.current) {
-          const overlayProgress = Math.max(0, Math.min((p - 0.1) / 0.5, 1));
-          gsap.set(overlayRef.current, { opacity: 0.7 - overlayProgress * 0.7 });
+          gsap.set(overlayRef.current, { opacity: 0 }); 
         }
 
         // Video: phase 0.3→1 — slow zoom in
@@ -73,27 +72,16 @@ export default function Hero() {
         }
       };
 
-      // Scroll animation — both desktop and mobile
-      if (!isMobile) {
-        ScrollTrigger.create({
-          trigger: containerRef.current,
-          start: 'top top',
-          end: '+=200%',
-          pin: true,
-          anticipatePin: 1,
-          scrub: 1.5,
-          onUpdate: scrollHandler
-        });
-      } else {
-        // Mobile: no pin, shorter scroll range, natural scroll
-        ScrollTrigger.create({
-          trigger: containerRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5,
-          onUpdate: scrollHandler
-        });
-      }
+      // Scroll animation — unified for both desktop and mobile
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: 'top top',
+        end: isMobile ? '+=120%' : '+=200%',
+        pin: true,
+        anticipatePin: 1,
+        scrub: isMobile ? 0.8 : 1.5,
+        onUpdate: scrollHandler
+      });
 
       // ── 4. MOUSE KINETICS (desktop only) ───────────────────────────────────
       let mouseTimeoutId: NodeJS.Timeout;
@@ -152,14 +140,36 @@ export default function Hero() {
         alignItems: 'center',
         position: 'relative',
         overflow: 'hidden',
-        backgroundColor: 'var(--bg-primary)',
+        backgroundColor: 'var(--bg-pure)', // Fixed pure white background to match reference
       }}
     >
+      {/* High-Fidelity Color Grading Filter */}
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
+        <filter id="luma-to-alpha-high-key">
+          {/* Luma to Alpha extraction */}
+          <feColorMatrix 
+            type="matrix" 
+            values="1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    1 1 1 0 0" 
+            result="masked"
+          />
+          {/* Lift shadows and match the 'Powder Blue' high-key aesthetic */}
+          <feComponentTransfer in="masked">
+            <feFuncR type="linear" slope="0.8" intercept="0.2" />
+            <feFuncG type="linear" slope="0.8" intercept="0.2" />
+            <feFuncB type="linear" slope="1.0" intercept="0.1" /> 
+            <feFuncA type="gamma" exponent="0.8" amplitude="1.2" />
+          </feComponentTransfer>
+        </filter>
+      </svg>
+
       {/* Video background */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <video
           ref={videoRef}
-          src="/hero-video.mp4?v=3"
+          src="/hero-video-2026.mp4"
           muted
           playsInline
           preload="auto"
@@ -168,12 +178,12 @@ export default function Hero() {
             objectFit: 'cover',
             transformOrigin: 'center center',
             willChange: 'transform',
-            mixBlendMode: 'screen'
+            filter: 'url(#luma-to-alpha-high-key) contrast(0.9) brightness(1.1)', // Final aesthetic polish
           }}
         />
         <div
           ref={overlayRef}
-          style={{ position: 'absolute', inset: 0, background: 'rgba(244,244,249,0.7)', zIndex: 1 }}
+          style={{ position: 'absolute', inset: 0, background: 'var(--bg-pure)', zIndex: 1 }}
         />
       </div>
 
@@ -184,7 +194,6 @@ export default function Hero() {
           position: 'relative',
           zIndex: 2,
           textAlign: 'center',
-          mixBlendMode: 'difference',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -195,7 +204,10 @@ export default function Hero() {
           id="hero-heading"
           className="kinetic-text"
           style={{
-            fontSize: 'clamp(2.5rem, 10vw, 8rem)',
+            fontSize: 'clamp(2.5rem, 11vw, 9rem)', // Ultra-massive for 2026 impact
+            fontWeight: 800,
+            letterSpacing: '-0.04em',
+            color: '#1a1a2e', // Deep Obsidian for maximum contrast on white
             margin: 0,
             display: 'flex',
             gap: 'clamp(0.5rem, 2vw, 2rem)',
@@ -214,10 +226,11 @@ export default function Hero() {
         <p
           ref={subtitleRef}
           style={{
-            fontSize: 'clamp(0.65rem, 1.2vw, 0.9rem)',
-            letterSpacing: '0.3em',
+            fontSize: 'clamp(0.7rem, 1.3vw, 1rem)',
+            fontWeight: 500,
+            letterSpacing: '0.4em',
             textTransform: 'uppercase',
-            color: 'rgba(26, 26, 46, 0.6)',
+            color: 'rgba(26, 26, 46, 0.7)',
             margin: 0,
             willChange: 'transform, opacity',
           }}

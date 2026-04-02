@@ -4,71 +4,154 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 export default function Footer() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const auraRef = useRef<HTMLDivElement>(null);
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
   const linksRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
   useEffect(() => {
-    const links = linksRef.current.filter(Boolean) as HTMLAnchorElement[];
-    
-    links.forEach(link => {
-      const handleMouseMove = (e: MouseEvent) => {
-        const position = link.getBoundingClientRect();
-        const x = e.clientX - position.left - position.width / 2;
-        const y = e.clientY - position.top - position.height / 2;
+    const ctx = gsap.context(() => {
+      // 1. MAGNETIC HEADING DISTORTION
+      const heading = headingRef.current;
+      if (heading) {
+        const chars = heading.querySelectorAll('.char');
         
-        gsap.to(link, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: 'power2.out' });
-      };
-      
-      const handleMouseLeave = () => {
-        gsap.to(link, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
-      };
+        const handleMouseMove = (e: MouseEvent) => {
+          const rect = heading.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const dist = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+          
+          if (dist < 800) { // Increased range for larger heading
+            chars.forEach((char) => {
+              const charRect = char.getBoundingClientRect();
+              const dx = e.clientX - (charRect.left + charRect.width / 2);
+              const dy = e.clientY - (charRect.top + charRect.height / 2);
+              const angle = Math.atan2(dy, dx);
+              const force = Math.max(0, (800 - dist) / 800);
+              
+              gsap.to(char, {
+                x: Math.cos(angle) * force * 50,
+                y: Math.sin(angle) * force * 50,
+                rotate: Math.cos(angle) * force * 20,
+                duration: 0.8,
+                ease: 'power3.out',
+                overwrite: 'auto'
+              });
+            });
+          }
+        };
 
-      link.addEventListener('mousemove', handleMouseMove);
-      link.addEventListener('mouseleave', handleMouseLeave);
+        const handleMouseLeave = () => {
+          gsap.to(chars, { x: 0, y: 0, rotate: 0, duration: 1.2, ease: 'elastic.out(1, 0.4)' });
+        };
 
-      return () => {
-        link.removeEventListener('mousemove', handleMouseMove);
-        link.removeEventListener('mouseleave', handleMouseLeave);
+        window.addEventListener('mousemove', handleMouseMove as EventListener);
+        heading.addEventListener('mouseleave', handleMouseLeave as EventListener);
       }
-    });
+
+      // 2. INTERACTIVE AURA TRACKING
+      const aura = auraRef.current;
+      const section = sectionRef.current;
+      if (aura && section) {
+        const moveAura = (e: MouseEvent) => {
+          const rect = section.getBoundingClientRect();
+          const x = e.clientX;
+          const y = e.clientY - rect.top;
+          gsap.to(aura, {
+            left: x,
+            top: y,
+            duration: 1.8,
+            ease: 'power2.out'
+          });
+        };
+        section.addEventListener('mousemove', moveAura as EventListener);
+      }
+
+      // 3. MAGNETIC LINKS & BUTTONS
+      const items = [...linksRef.current, submitBtnRef.current].filter(Boolean) as (HTMLElement | HTMLAnchorElement)[];
+      items.forEach(item => {
+        const move = (e: MouseEvent) => {
+          const rect = item.getBoundingClientRect();
+          const x = (e.clientX - (rect.left + rect.width / 2)) * 0.45;
+          const y = (e.clientY - (rect.top + rect.height / 2)) * 0.45;
+          gsap.to(item, { x, y, duration: 0.4, ease: 'power2.out' });
+        };
+        const reset = () => gsap.to(item, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.3)' });
+        item.addEventListener('mousemove', move as EventListener);
+        item.addEventListener('mouseleave', reset as EventListener);
+      });
+
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
     <footer 
+      ref={sectionRef}
       id="contact" 
       className="site-footer" 
       role="contentinfo"
       style={{
-        padding: '10vw 5%',
-        backgroundColor: 'var(--bg-primary)',
-        borderTop: '1px solid var(--surface-secondary)',
+        padding: '12vw 5%',
+        backgroundColor: '#ffffff',
         display: 'flex',
         flexDirection: 'column',
-        gap: '5vh',
+        gap: '8vh',
         position: 'relative',
-        zIndex: 5
+        zIndex: 5,
+        overflow: 'hidden'
       }}
     >
-      <div className="footer-cta" style={{ textAlign: 'center', marginBottom: '8vh' }}>
+      {/* Interactive Background Aura */}
+      <div 
+        ref={auraRef}
+        className="footer-aura"
+        style={{
+          position: 'absolute',
+          width: '60vw',
+          height: '60vw',
+          background: 'radial-gradient(circle, rgba(150, 192, 212, 0.12) 0%, transparent 70%)',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          transform: 'translate(-50%, -50%)',
+          zIndex: -1,
+          left: '50%',
+          top: '50%'
+        }}
+      />
+
+      <div className="footer-cta" style={{ textAlign: 'center', marginBottom: '4vh' }}>
         <h2 
-          className="kinetic-text" 
+          ref={headingRef}
+          className="kinetic-text flex flex-wrap justify-center overflow-visible" 
           style={{ 
-            fontSize: 'clamp(4rem, 15vw, 20rem)', 
+            fontSize: 'clamp(5rem, 18vw, 24rem)', 
             margin: 0, 
-            lineHeight: 0.85, 
-            letterSpacing: '-0.03em',
+            lineHeight: 0.8, 
+            letterSpacing: '-0.05em',
             textTransform: 'uppercase',
             fontWeight: 900,
+            color: 'var(--text-primary)',
+            mixBlendMode: 'normal',
+            userSelect: 'none'
           }}
         >
-          Let&apos;s<br />talk.
+          {"Let's talk.".split('').map((char, i) => (
+            <span key={i} className="char relative inline-block">
+              {char === ' ' ? '\u00A0' : char}
+            </span>
+          ))}
         </h2>
       </div>
       
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '2rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '4rem', position: 'relative' }}>
         <form 
           className="minimal-form" 
           aria-label="Contact form" 
-          style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: 0 }}
+          style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '3.5rem', minWidth: 0 }}
           onSubmit={(e) => e.preventDefault()}
         >
           <div className="input-group" style={{ position: 'relative' }}>
@@ -82,22 +165,25 @@ export default function Footer() {
                 width: '100%',
                 background: 'transparent',
                 border: 'none',
-                borderBottom: '1px solid var(--surface-secondary)',
+                borderBottom: '2px solid rgba(26, 26, 46, 0.1)',
                 color: 'var(--text-primary)',
-                padding: '1rem 0',
-                fontSize: '1.2rem',
+                padding: '1.5rem 0',
+                fontSize: '1.5rem',
                 outline: 'none',
-                transition: 'border-bottom-color 0.3s'
+                transition: 'border-bottom-color 0.5s var(--ease-fluid)'
               }}
+              onFocus={(e) => e.currentTarget.style.borderBottomColor = 'var(--text-primary)'}
+              onBlur={(e) => e.currentTarget.style.borderBottomColor = 'rgba(26, 26, 46, 0.1)'}
             />
             <label 
               htmlFor="name" 
               style={{ 
-                position: 'absolute', top: '1rem', left: 0, color: 'var(--text-secondary)',
-                transition: '0.3s ease', pointerEvents: 'none'
+                position: 'absolute', top: '1.5rem', left: 0, color: 'var(--text-secondary)',
+                transition: '0.4s var(--ease-fluid)', pointerEvents: 'none',
+                fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '0.1em'
               }}
             >
-              What is your name?
+              Your Name
             </label>
           </div>
           <div className="input-group" style={{ position: 'relative' }}>
@@ -111,50 +197,74 @@ export default function Footer() {
                 width: '100%',
                 background: 'transparent',
                 border: 'none',
-                borderBottom: '1px solid var(--surface-secondary)',
+                borderBottom: '2px solid rgba(26, 26, 46, 0.1)',
                 color: 'var(--text-primary)',
-                padding: '1rem 0',
-                fontSize: '1.2rem',
+                padding: '1.5rem 0',
+                fontSize: '1.5rem',
                 outline: 'none',
-                transition: 'border-bottom-color 0.3s'
+                transition: 'border-bottom-color 0.5s var(--ease-fluid)'
               }}
+              onFocus={(e) => e.currentTarget.style.borderBottomColor = 'var(--text-primary)'}
+              onBlur={(e) => e.currentTarget.style.borderBottomColor = 'rgba(26, 26, 46, 0.1)'}
             />
             <label 
               htmlFor="email" 
               style={{ 
-                position: 'absolute', top: '1rem', left: 0, color: 'var(--text-secondary)',
-                transition: '0.3s ease', pointerEvents: 'none'
+                position: 'absolute', top: '1.5rem', left: 0, color: 'var(--text-secondary)',
+                transition: '0.4s var(--ease-fluid)', pointerEvents: 'none',
+                fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '0.1em'
               }}
             >
-              What is your email?
+              Email Address
             </label>
           </div>
+          
           <button 
+            ref={submitBtnRef}
             type="submit" 
+            className="morphing-submit"
             style={{
               alignSelf: 'flex-start',
-              background: 'transparent',
-              color: 'var(--accent-lime)',
-              border: '1px solid var(--accent-lime)',
-              padding: '1rem 2rem',
-              fontSize: '1rem',
+              background: 'var(--text-primary)',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '100px',
+              padding: '0',
+              width: '80px',
+              height: '80px',
+              fontSize: '1.1rem',
               cursor: 'none',
               textTransform: 'uppercase',
-              fontWeight: 600,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
               marginTop: '1rem',
-              transition: 'background 0.3s, color 0.3s'
+              transition: 'all 0.6s var(--ease-fluid)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+              overflow: 'hidden'
             }}
-            data-magnetic-target
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--accent-lime)';
-              e.currentTarget.style.color = 'var(--bg-pure)';
+              e.currentTarget.style.width = '320px';
+              e.currentTarget.style.background = '#96C0D4';
+              e.currentTarget.style.color = '#1a1a2e';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-              e.currentTarget.style.color = 'var(--accent-lime)';
+              e.currentTarget.style.width = '80px';
+              e.currentTarget.style.background = 'var(--text-primary)';
+              e.currentTarget.style.color = '#ffffff';
             }}
           >
-            <span>Send message</span>
+            <span style={{ 
+              whiteSpace: 'nowrap', 
+              opacity: 0, 
+              transition: 'opacity 0.3s' 
+            }} 
+            className="btn-text"
+            >
+              SEND MESSAGE
+            </span>
           </button>
         </form>
 
@@ -164,9 +274,9 @@ export default function Footer() {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '1rem',
+            gap: '1.5rem',
             alignItems: 'flex-end',
-            fontSize: '1.2rem',
+            fontSize: '1.4rem',
             flexShrink: 0
           }}
         >
@@ -177,14 +287,30 @@ export default function Footer() {
               ref={(el) => { linksRef.current[i] = el; }}
               className="magnetic-link" 
               aria-label={`${network} Profile`}
-              style={{ display: 'inline-block', padding: '0.5rem', cursor: 'none' }}
-              data-magnetic-target
+              style={{ 
+                display: 'inline-block', 
+                padding: '0.5rem', 
+                cursor: 'none',
+                fontWeight: 600,
+                letterSpacing: '0.05em'
+              }}
             >
               {network}
             </a>
           ))}
         </nav>
       </div>
+
+      <style jsx>{`
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+          transform: translateY(-2.5rem) scale(0.85);
+          color: #96C0D4;
+        }
+        .morphing-submit:hover .btn-text {
+          opacity: 1 !important;
+        }
+      `}</style>
     </footer>
   );
 }

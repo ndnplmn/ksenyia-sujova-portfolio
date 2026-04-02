@@ -4,85 +4,82 @@ import { useEffect, useState, useRef } from 'react';
 import gsap from 'gsap';
 
 export default function Preloader() {
-  const [progress, setProgress] = useState(0);
+  const [percent, setPercent] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
-  const circleRef = useRef<SVGCircleElement>(null);
+  const auraRef = useRef<HTMLDivElement>(null);
+  const numberRef = useRef<HTMLDivElement>(null);
+  const monogramRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    const radius = 80;
-    const circumference = 2 * Math.PI * radius;
-    if (circleRef.current) {
-      circleRef.current.style.strokeDasharray = `${circumference}`;
-      circleRef.current.style.strokeDashoffset = `${circumference}`;
-    }
+    // 2026 Pinnacle Timing: Precise and weighted
+    const DURATION = 2.8; 
+    const tl = gsap.timeline();
 
-    const DURATION = 2400; // Slightly longer for "Max Pro" gravitas
-    const startTime = Date.now();
-    let animFrame: number;
+    // Initial Aura materialization
+    tl.fromTo(auraRef.current, 
+      { scale: 0.8, opacity: 0, filter: 'blur(30px)' },
+      { scale: 1, opacity: 1, filter: 'blur(0px)', duration: 1.2, ease: 'expo.out' }
+    );
 
-    const tick = () => {
-      const elapsed = Date.now() - startTime;
-      const pct = Math.min((elapsed / DURATION) * 100, 100);
-      setProgress(Math.floor(pct));
-
-      if (circleRef.current) {
-        const offset = circumference - (pct / 100) * circumference;
-        circleRef.current.style.strokeDashoffset = `${offset}`;
+    // Sync Counter & Aura Turbulence
+    const counterObj = { value: 0 };
+    gsap.to(counterObj, {
+      value: 100,
+      duration: DURATION,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        const val = Math.floor(counterObj.value);
+        setPercent(val);
+        
+        // Dynamic Turbulence modulation
+        const turb = document.querySelector('#aura-turb');
+        if (turb) {
+          const baseFreq = 0.01 + (val / 100) * 0.05;
+          turb.setAttribute('baseFrequency', `${baseFreq}`);
+        }
+      },
+      onComplete: () => {
+        setTimeout(exitTransition, 400);
       }
+    });
 
-      // Subtle logo scaling as it loads (Sensory detail)
-      if (logoRef.current) {
-        const scaleBase = 1 + (pct / 100) * 0.2;
-        logoRef.current.style.transform = `scale(${scaleBase})`;
-      }
+    function exitTransition() {
+      if (!containerRef.current) return;
 
-      if (pct < 100) {
-        animFrame = requestAnimationFrame(tick);
-      } else {
-        setTimeout(hidePreloader, 600);
-      }
-    };
+      const exitTl = gsap.timeline({
+        onComplete: () => {
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+          if (containerRef.current) containerRef.current.style.display = 'none';
+          window.dispatchEvent(new Event('preloaderComplete'));
+        }
+      });
 
-    animFrame = requestAnimationFrame(tick);
-
-    function hidePreloader() {
-      if (!containerRef.current) {
-        cleanup();
-        return;
-      }
-
-      const tl = gsap.timeline({ onComplete: cleanup });
-
-      // 2026 Seamless Morph Transition
-      tl.to(contentRef.current, {
-        scale: 12, // Giant zoom expansion "pull-through"
+      // 2026 'Lens Pull' Effect
+      exitTl.to(monogramRef.current, {
+        scale: 40,
         opacity: 0,
-        duration: 1.2,
-        ease: 'power4.inOut',
+        duration: 1.5,
+        ease: 'expo.inOut'
       })
       .to(containerRef.current, {
+        backgroundColor: 'transparent',
+        duration: 1,
+        ease: 'power2.inOut'
+      }, '-=1.2')
+      .to(auraRef.current, {
+        scale: 2,
         opacity: 0,
-        duration: 0.8,
-        ease: 'power2.inOut',
-      }, '-=0.8');
-    }
-
-    function cleanup() {
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      if (containerRef.current) {
-        containerRef.current.style.display = 'none';
-      }
-      window.dispatchEvent(new Event('preloaderComplete'));
+        duration: 1.2,
+        ease: 'power4.inOut'
+      }, '-=1.5');
     }
 
     return () => {
-      cancelAnimationFrame(animFrame);
+      tl.kill();
     };
   }, []);
 
@@ -94,8 +91,8 @@ export default function Preloader() {
         inset: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: 'var(--bg-primary)',
-        zIndex: 99999,
+        backgroundColor: 'var(--bg-pure)',
+        zIndex: 999999,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -103,74 +100,75 @@ export default function Preloader() {
         overflow: 'hidden'
       }}
     >
+      {/* SVG Morphing Filter */}
+      <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+        <filter id="fluid-aura">
+          <feTurbulence id="aura-turb" type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="50" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </svg>
+
+      {/* Fluid Aura Element */}
       <div
-        ref={contentRef}
+        ref={auraRef}
         style={{
-          position: 'relative',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '240px',
-          height: '240px',
+          position: 'absolute',
+          width: '400px',
+          height: '400px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(150, 192, 212, 0.4) 0%, transparent 70%)',
+          filter: 'url(#fluid-aura)',
           willChange: 'transform, opacity'
         }}
-      >
-        <svg
-          width="240"
-          height="240"
-          viewBox="0 0 240 240"
-          style={{ position: 'absolute', top: 0, left: 0, transform: 'rotate(-90deg)' }}
-        >
-          <circle
-            cx="120"
-            cy="120"
-            r="80"
-            fill="transparent"
-            stroke="var(--surface-secondary)"
-            strokeWidth="1"
-            opacity="0.3"
-          />
-          <circle
-            ref={circleRef}
-            cx="120"
-            cy="120"
-            r="80"
-            fill="transparent"
-            stroke="var(--text-primary)"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
+      />
 
+      {/* Kinetic Content */}
+      <div style={{ position: 'relative', textAlign: 'center' }}>
         <div
-          ref={logoRef}
-          className="kinetic-text"
-          style={{ 
-            fontSize: '3.5rem', 
-            color: 'var(--text-primary)', 
-            textAlign: 'center',
+          ref={monogramRef}
+          style={{
+            fontSize: '4.5rem',
             fontWeight: 900,
             letterSpacing: '-0.05em',
-            willChange: 'transform'
+            color: 'var(--text-primary)',
+            willChange: 'transform, opacity'
           }}
         >
           KS
         </div>
 
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '-40px',
-            fontSize: '0.7rem',
-            color: 'var(--text-secondary)',
-            letterSpacing: '0.4em',
-            textTransform: 'uppercase',
+        {/* High-Fidelity Slot Counter */}
+        <div 
+          style={{ 
+            marginTop: '20px',
+            fontSize: '0.85rem',
             fontWeight: 600,
-            opacity: progress / 100
+            letterSpacing: '0.5em',
+            textTransform: 'uppercase',
+            color: 'var(--text-secondary)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '1.2em',
+            overflow: 'hidden'
           }}
         >
-          {progress}%
+           <span style={{ display: 'inline-block', width: '3ch', textAlign: 'right' }}>{percent}</span>
+           <span>%</span>
         </div>
+      </div>
+
+      {/* Atmospheric Note */}
+      <div style={{
+        position: 'absolute',
+        bottom: '8vh',
+        fontSize: '0.65rem',
+        letterSpacing: '0.3em',
+        textTransform: 'uppercase',
+        opacity: 0.4,
+        color: 'var(--text-secondary)'
+      }}>
+        Establishing Atmosphere
       </div>
     </div>
   );

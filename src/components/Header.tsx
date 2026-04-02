@@ -118,45 +118,57 @@ export default function Header() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '12px',
             textDecoration: 'none',
             color: 'var(--text-primary)',
-            cursor: 'none'
+            cursor: 'none',
+            position: 'relative'
           }}
           data-magnetic-target
-          onMouseEnter={() => {
-             gsap.to('.logo-circle', { scale: 1.1, backgroundColor: 'var(--text-primary)', color: 'var(--bg-pure)', border: '1px solid var(--text-primary)', duration: 0.4, ease: 'power3.out' });
-             gsap.to('.logo-text span', { letterSpacing: '0.25em', x: 4, stagger: 0.05, duration: 0.4, ease: 'power3.out' });
+          onMouseEnter={(e) => {
+             const pill = e.currentTarget.querySelector('.logo-pill');
+             const k = e.currentTarget.querySelector('.logo-k');
+             const s = e.currentTarget.querySelector('.logo-s');
+             const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
+             
+             gsap.to(pill, { width: '190px', backgroundColor: 'var(--bg-pure)', borderColor: 'var(--accent-powder-blue)', boxShadow: '0 0 25px rgba(150, 192, 212, 0.25)', duration: 0.6, ease: 'expo.out' });
+             gsap.to(k, { x: -75, color: 'var(--accent-powder-blue)', duration: 0.6, ease: 'expo.out' });
+             gsap.to(s, { x: -10, color: 'var(--accent-powder-blue)', duration: 0.6, ease: 'expo.out' });
+             gsap.to(rest, { opacity: 1, x: 0, stagger: 0.05, duration: 0.5, delay: 0.1, ease: 'power3.out' });
           }}
-          onMouseLeave={() => {
-             gsap.to('.logo-circle', { scale: 1, backgroundColor: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--surface-secondary)', duration: 0.4, ease: 'power3.out' });
-             gsap.to('.logo-text span', { letterSpacing: '0.1em', x: 0, stagger: 0.05, duration: 0.4, ease: 'power3.out' });
+          onMouseLeave={(e) => {
+             const pill = e.currentTarget.querySelector('.logo-pill');
+             const k = e.currentTarget.querySelector('.logo-k');
+             const s = e.currentTarget.querySelector('.logo-s');
+             const rest = e.currentTarget.querySelectorAll('.logo-name-rest');
+
+             gsap.to(pill, { width: '45px', backgroundColor: 'transparent', borderColor: 'var(--surface-secondary)', boxShadow: 'none', duration: 0.6, ease: 'expo.inOut' });
+             gsap.to([k, s], { x: 0, color: 'var(--text-primary)', duration: 0.6, ease: 'expo.inOut' });
+             gsap.to(rest, { opacity: 0, x: 10, duration: 0.4, ease: 'power2.in' });
           }}
         >
           <div
-             className="logo-circle"
-             style={{
-               width: '45px', height: '45px',
-               borderRadius: '50%',
-               border: '1px solid var(--surface-secondary)',
-               display: 'flex', alignItems: 'center', justifyContent: 'center',
-               fontSize: '1rem', fontWeight: 900,
-               willChange: 'transform, background-color, border, color'
-             }}
-          >
-            KS
-          </div>
-          <div
-            className="logo-text"
+            className="logo-pill"
             style={{
-              display: 'flex', flexDirection: 'column',
-              fontSize: '0.65rem', fontWeight: 600,
-              textTransform: 'uppercase', letterSpacing: '0.1em',
-              lineHeight: 1.2
+              width: '45px',
+              height: '45px',
+              borderRadius: '999px',
+              border: '1px solid var(--surface-secondary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
+              position: 'relative',
+              transition: 'border-color 0.4s ease',
+              willChange: 'width, background-color, box-shadow'
             }}
           >
-            <span style={{ willChange: 'letter-spacing, transform' }}>Ksenyia</span>
-            <span style={{ color: 'var(--text-secondary)', willChange: 'letter-spacing, transform' }}>Sujova</span>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+              <span className="logo-k" style={{ position: 'absolute', fontWeight: 900, fontSize: '1rem', willChange: 'transform, color' }}>K</span>
+              <span className="logo-name-rest" style={{ position: 'absolute', left: '26px', opacity: 0, fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.02em', whiteSpace: 'nowrap', transform: 'translateX(10px)' }}>senyia</span>
+              
+              <span className="logo-s" style={{ position: 'absolute', fontWeight: 900, fontSize: '1rem', willChange: 'transform, color', marginLeft: '1.2em' }}>S</span>
+              <span className="logo-name-rest" style={{ position: 'absolute', left: '108px', opacity: 0, fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.02em', whiteSpace: 'nowrap', transform: 'translateX(10px)' }}>ujova</span>
+            </div>
           </div>
         </Link>
 
@@ -191,26 +203,98 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Desktop: Contact pill button on the right */}
-        <a
-          href="#contact"
-          className="desktop-nav contact-pill"
-          onClick={(e) => handleLinkClick(e, '#contact')}
-          style={pillStyle}
-          data-magnetic-target
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--accent-lime)';
-            e.currentTarget.style.borderColor = 'var(--accent-lime)';
-            e.currentTarget.style.color = 'var(--bg-primary)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.borderColor = 'var(--surface-secondary)';
-            e.currentTarget.style.color = 'var(--text-primary)';
-          }}
-        >
-          Contact
-        </a>
+        {/* Desktop: Morphing Contact Capsule (2026 Pinnacle) */}
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText('ks@sujova.design');
+              const el = document.querySelector('.contact-pill-text');
+              if (el) {
+                gsap.to(el, { 
+                  opacity: 0, 
+                  y: -5, 
+                  duration: 0.2, 
+                  onComplete: () => {
+                    el.textContent = 'Copied!';
+                    gsap.fromTo(el, { y: 5 }, { y: 0, opacity: 1, duration: 0.3, ease: 'back.out(2)' });
+                    setTimeout(() => {
+                      gsap.to(el, { 
+                        opacity: 0, 
+                        y: -5, 
+                        duration: 0.2, 
+                        onComplete: () => {
+                          el.textContent = 'ks@sujova.design'; // Stay on email while hovered
+                          gsap.fromTo(el, { y: 5 }, { y: 0, opacity: 1, duration: 0.3 });
+                        }
+                      });
+                    }, 1500);
+                  }
+                });
+              }
+            }}
+            className="desktop-nav contact-pill"
+            style={{
+              ...pillStyle,
+              position: 'relative',
+              overflow: 'hidden',
+              minWidth: '100px',
+              transition: 'background-color 0.4s ease, border-color 0.4s ease',
+              display: 'flex',
+              justifyContent: 'center',
+              background: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+            }}
+            data-magnetic-target
+            onMouseEnter={(e) => {
+              gsap.to(e.currentTarget, { 
+                width: '180px', 
+                backgroundColor: 'var(--text-primary)', 
+                color: 'var(--bg-pure)',
+                borderColor: 'var(--text-primary)',
+                duration: 0.5, 
+                ease: 'expo.out' 
+              });
+              const text = e.currentTarget.querySelector('.contact-pill-text');
+              if (text) {
+                gsap.to(text, { 
+                  opacity: 0, 
+                  y: -5, 
+                  duration: 0.2, 
+                  onComplete: () => {
+                    text.textContent = 'ks@sujova.design';
+                    gsap.fromTo(text, { y: 5 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
+                  } 
+                });
+              }
+            }}
+            onMouseLeave={(e) => {
+              gsap.to(e.currentTarget, { 
+                width: '100px', 
+                backgroundColor: 'transparent', 
+                color: 'var(--text-primary)',
+                borderColor: 'var(--surface-secondary)',
+                duration: 0.5, 
+                ease: 'expo.inOut' 
+              });
+              const text = e.currentTarget.querySelector('.contact-pill-text');
+              if (text) {
+                gsap.to(text, { 
+                  opacity: 0, 
+                  y: 5, 
+                  duration: 0.2, 
+                  onComplete: () => {
+                    text.textContent = 'Contact';
+                    gsap.fromTo(text, { y: -5 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
+                  } 
+                });
+              }
+            }}
+          >
+            <span className="contact-pill-text" style={{ position: 'relative', zIndex: 1, willChange: 'transform, opacity' }}>
+              Contact
+            </span>
+          </button>
+        </div>
 
         {/* Mobile hamburger — hidden on desktop */}
         <button
