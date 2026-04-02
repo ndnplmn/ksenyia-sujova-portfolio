@@ -151,7 +151,9 @@ export default function Hero() {
           src="/hero-video-2026.mp4"
           muted
           playsInline
-          preload="auto"
+          onLoadedMetadata={(e) => {
+            e.currentTarget.currentTime = 0.01;
+          }}
           style={{
             width: '100%', height: '100%',
             objectFit: 'cover',
