@@ -149,7 +149,7 @@ export default function Header() {
           position: 'fixed',
           top: 0,
           width: '100%',
-          padding: '1.5rem 5%',
+          padding: '0.75rem 5%',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
