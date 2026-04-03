@@ -119,7 +119,7 @@ export default function Footer() {
       style={{
         height: isMobile ? '100svh' : '100vh',
         padding: '0 5%',
-        backgroundColor: 'var(--bg-pure)',
+        backgroundColor: 'var(--bg-primary)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',

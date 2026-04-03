@@ -129,7 +129,7 @@ export default function ExperienceTimeline() {
       id="experience"
       className="timeline-section"
       style={{ 
-        backgroundColor: 'var(--bg-pure)',
+        backgroundColor: 'var(--bg-primary)',
         color: 'var(--text-primary)',
         height: isMobile ? 'auto' : '100vh',
         overflow: isMobile ? 'visible' : 'hidden',
