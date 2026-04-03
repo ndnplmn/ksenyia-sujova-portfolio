@@ -147,7 +147,7 @@ export default function Footer() {
         </h2>
       </div>
       
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '4rem', position: 'relative' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '4rem', position: 'relative' }}>
         <form 
           className="minimal-form" 
           aria-label="Contact form" 
@@ -275,7 +275,8 @@ export default function Footer() {
             gap: '1.5rem',
             alignItems: 'flex-end',
             fontSize: '1.4rem',
-            flexShrink: 0
+            flexShrink: 0,
+            paddingTop: '1.5rem' // Align with the first input label
           }}
         >
           {['Behance', 'Twitter', 'LinkedIn'].map((network, i) => (
