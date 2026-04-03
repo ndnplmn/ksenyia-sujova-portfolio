@@ -9,7 +9,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // Detect touch devices — disable Lenis on mobile to avoid iOS conflicts
+    // 1. Force scroll to top on refresh
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    // Detect touch devices
     const isMobile =
       window.matchMedia('(max-width: 768px)').matches ||
       'ontouchstart' in window ||
