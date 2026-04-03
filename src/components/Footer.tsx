@@ -118,12 +118,12 @@ export default function Footer() {
       role="contentinfo"
       style={{
         height: isMobile ? '100svh' : '100vh',
-        padding: '0 5%',
+        padding: isMobile ? '0 6%' : '0 5%',
         backgroundColor: 'var(--bg-primary)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        gap: isMobile ? '4vh' : '8vh',
+        gap: isMobile ? '3vh' : '8vh',
         position: 'relative',
         zIndex: 5,
         overflow: 'hidden'
@@ -147,15 +147,15 @@ export default function Footer() {
         }}
       />
 
-      <div className="footer-cta" style={{ textAlign: 'center', marginBottom: '4vh' }}>
+      <div className="footer-cta" style={{ textAlign: 'center', marginBottom: isMobile ? '2vh' : '4vh' }}>
         <h2 
           ref={headingRef}
           className="kinetic-text flex flex-col items-center overflow-visible" 
           style={{ 
-            fontSize: 'clamp(2.5rem, 8vw, 12rem)', 
+            fontSize: isMobile ? 'clamp(2rem, 11vw, 4rem)' : 'clamp(2.5rem, 8vw, 12rem)', 
             margin: 0, 
-            lineHeight: 1, 
-            letterSpacing: '-0.04em',
+            lineHeight: 1.05, 
+            letterSpacing: '-0.03em',
             textTransform: 'uppercase',
             fontWeight: 900,
             color: 'var(--text-primary)',
@@ -180,11 +180,11 @@ export default function Footer() {
         </h2>
       </div>
       
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '4rem', position: 'relative' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: isMobile ? '2rem' : '4rem', position: 'relative' }}>
         <form 
           className="minimal-form" 
           aria-label="Contact form" 
-          style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '3.5rem', minWidth: 0 }}
+          style={{ flex: '1 1 auto', width: '100%', display: 'flex', flexDirection: 'column', gap: isMobile ? '2rem' : '3.5rem', minWidth: 0 }}
           onSubmit={handleFormSubmit}
         >
           <div className="input-group" style={{ position: 'relative' }}>
@@ -263,14 +263,14 @@ export default function Footer() {
               border: 'none',
               borderRadius: '100px',
               padding: '0 2.5rem',
-              width: '300px',
-              height: '60px',
-              fontSize: '1rem',
-              cursor: 'none',
+              width: isMobile ? '100%' : '300px',
+              height: '56px',
+              fontSize: isMobile ? '0.85rem' : '1rem',
+              cursor: isMobile ? 'auto' : 'none',
               textTransform: 'uppercase',
               fontWeight: 700,
               letterSpacing: '0.15em',
-              marginTop: '1.5rem',
+              marginTop: isMobile ? '0.5rem' : '1.5rem',
               transition: 'background 0.5s var(--ease-fluid), transform 0.3s var(--ease-fluid)',
               display: 'flex',
               alignItems: 'center',
@@ -310,12 +310,14 @@ export default function Footer() {
           aria-label="Social Networks"
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            gap: '1.5rem',
-            alignItems: 'flex-end',
-            fontSize: '1.4rem',
+            flexDirection: isMobile ? 'row' : 'column',
+            gap: isMobile ? '2rem' : '1.5rem',
+            alignItems: isMobile ? 'center' : 'flex-end',
+            justifyContent: isMobile ? 'flex-start' : 'flex-start',
+            fontSize: isMobile ? '1rem' : '1.4rem',
             flexShrink: 0,
-            paddingTop: '1.5rem' // Align with the first input label
+            paddingTop: isMobile ? 0 : '1.5rem',
+            width: isMobile ? '100%' : 'auto'
           }}
         >
           {['Behance', 'Twitter', 'LinkedIn'].map((network, i) => (
@@ -327,8 +329,8 @@ export default function Footer() {
               aria-label={`${network} Profile`}
               style={{ 
                 display: 'inline-block', 
-                padding: '0.5rem', 
-                cursor: 'none',
+                padding: isMobile ? '0.25rem 0' : '0.5rem', 
+                cursor: isMobile ? 'auto' : 'none',
                 fontWeight: 600,
                 letterSpacing: '0.05em'
               }}

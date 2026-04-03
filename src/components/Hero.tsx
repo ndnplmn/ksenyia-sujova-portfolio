@@ -80,10 +80,10 @@ export default function Hero() {
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: 'top top',
-        end: isMobile ? '+=80%' : '+=200%', // Shorter end on mobile to keep pace
+        end: isMobile ? '+=50%' : '+=200%',
         pin: true,
         anticipatePin: 1,
-        scrub: isMobile ? 0.4 : 1.5, // Faster scrub for touch
+        scrub: isMobile ? 0.3 : 1.5,
         onUpdate: scrollHandler
       });
 

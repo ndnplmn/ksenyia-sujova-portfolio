@@ -219,7 +219,7 @@ export default function PortfolioGrid() {
       ref={sectionRef}
       id="work" 
       style={{ 
-        padding: isMobile ? '20vw 5vw' : '12vw 5vw 20vw', 
+        padding: isMobile ? '22vw 5vw 20vw' : '12vw 5vw 20vw', 
         backgroundColor: 'var(--bg-primary)', 
         position: 'relative', 
         overflow: 'hidden' 

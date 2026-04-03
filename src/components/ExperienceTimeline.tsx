@@ -135,7 +135,7 @@ export default function ExperienceTimeline() {
         overflow: isMobile ? 'visible' : 'hidden',
         position: 'relative',
         zIndex: 10,
-        padding: isMobile ? '20vw 0' : '0'
+        padding: isMobile ? '15vw 0 28vw' : '0'
       }}
     >
       {/* Background Cinematic Aura - Sapphire Blend */}

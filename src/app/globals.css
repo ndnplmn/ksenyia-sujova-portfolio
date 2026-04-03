@@ -200,7 +200,7 @@ a {
     width: 100% !important;
     height: auto !important;
     padding: 10vw 0 !important;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(108,188,216, 0.15);
     position: relative !important;
   }
   .timeline-slide:last-child {
@@ -226,7 +226,8 @@ a {
 
   /* ── FOOTER ── */
   .site-footer {
-    padding: 15vw 5% !important;
+    min-height: 100svh;
+    min-height: 100dvh;
   }
   .footer-social {
     align-items: flex-start !important;
