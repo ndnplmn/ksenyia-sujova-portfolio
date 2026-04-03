@@ -218,13 +218,18 @@ export default function PortfolioGrid() {
     <section 
       ref={sectionRef}
       id="work" 
-      style={{ padding: '20vw 5vw', backgroundColor: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}
+      style={{ 
+        padding: isMobile ? '20vw 5vw' : '12vw 5vw 20vw', 
+        backgroundColor: 'var(--bg-primary)', 
+        position: 'relative', 
+        overflow: 'hidden' 
+      }}
     >
-      <div style={{ marginBottom: '12vw', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem' }}>
+      <div style={{ marginBottom: isMobile ? '12vw' : '24vw', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem' }}>
         <h2 style={{ fontSize: 'clamp(3rem, 8vw, 12rem)', margin: 0, color: 'var(--text-primary)', fontWeight: 300, letterSpacing: '-0.04em' }}>
           FEATURED<br />WORK
         </h2>
-        <p style={{ color: 'var(--text-secondary)', letterSpacing: '0.3em', textTransform: 'uppercase', margin: 0, paddingBottom: '2.5rem', fontSize: '0.8rem', fontWeight: 600 }}>
+        <p style={{ color: 'var(--text-secondary)', letterSpacing: '0.3em', textTransform: 'uppercase', margin: 0, paddingBottom: isMobile ? '1rem' : '2.5rem', fontSize: '0.8rem', fontWeight: 600 }}>
           Immersed in Visual Storytelling
         </p>
       </div>
