@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 export default function Footer() {
@@ -88,6 +88,19 @@ export default function Footer() {
     return () => ctx.revert();
   }, []);
 
+  const [btnText, setBtnText] = useState('SEND MESSAGE');
+  const btnTextTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setBtnText('TALK SOON');
+    
+    if (btnTextTimeoutRef.current) clearTimeout(btnTextTimeoutRef.current);
+    btnTextTimeoutRef.current = setTimeout(() => {
+      setBtnText('SEND MESSAGE');
+    }, 2500);
+  };
+
   return (
     <footer 
       ref={sectionRef}
@@ -161,7 +174,7 @@ export default function Footer() {
           className="minimal-form" 
           aria-label="Contact form" 
           style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '3.5rem', minWidth: 0 }}
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleFormSubmit}
         >
           <div className="input-group" style={{ position: 'relative' }}>
             <input 
@@ -273,9 +286,10 @@ export default function Footer() {
               opacity: 1, 
               transition: 'opacity 0.3s' 
             }} 
+            key={btnText}
             className="btn-text"
             >
-              SEND MESSAGE
+              {btnText}
             </span>
           </button>
         </form>
