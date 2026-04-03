@@ -128,10 +128,10 @@ export default function Footer() {
           ref={headingRef}
           className="kinetic-text flex flex-wrap justify-center overflow-visible" 
           style={{ 
-            fontSize: 'clamp(5rem, 18vw, 24rem)', 
+            fontSize: 'clamp(2.5rem, 8vw, 12rem)', 
             margin: 0, 
-            lineHeight: 0.8, 
-            letterSpacing: '-0.05em',
+            lineHeight: 0.9, 
+            letterSpacing: '-0.04em',
             textTransform: 'uppercase',
             fontWeight: 900,
             color: 'var(--text-primary)',
@@ -139,7 +139,7 @@ export default function Footer() {
             userSelect: 'none'
           }}
         >
-          {"Let's talk.".split('').map((char, i) => (
+          {"Let's get to know each other".split('').map((char, i) => (
             <span key={i} className="char relative inline-block">
               {char === ' ' ? '\u00A0' : char}
             </span>
