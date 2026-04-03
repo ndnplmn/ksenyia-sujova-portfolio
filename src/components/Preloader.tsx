@@ -159,18 +159,6 @@ export default function Preloader() {
         </div>
       </div>
 
-      {/* Atmospheric Note */}
-      <div style={{
-        position: 'absolute',
-        bottom: '8vh',
-        fontSize: '0.65rem',
-        letterSpacing: '0.3em',
-        textTransform: 'uppercase',
-        opacity: 0.4,
-        color: 'var(--text-secondary)'
-      }}>
-        Establishing Atmosphere
-      </div>
     </div>
   );
 }

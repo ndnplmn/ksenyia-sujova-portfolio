@@ -155,21 +155,6 @@ export default function ExperienceTimeline() {
         }}
       />
 
-      <h2 
-        style={{ 
-          position: 'absolute', 
-          top: '3.5vh', 
-          left: '5vw', 
-          fontSize: '0.7rem', 
-          letterSpacing: '0.4em', 
-          textTransform: 'uppercase',
-          color: 'var(--text-secondary)',
-          zIndex: 100,
-          margin: 0
-        }}
-      >
-        THE STORY / EVOLUTION
-      </h2>
 
       <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative', marginTop: '5vh' }}>
         {experiences.map((exp, index) => (
