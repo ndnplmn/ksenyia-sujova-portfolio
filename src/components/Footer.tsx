@@ -126,11 +126,11 @@ export default function Footer() {
       <div className="footer-cta" style={{ textAlign: 'center', marginBottom: '4vh' }}>
         <h2 
           ref={headingRef}
-          className="kinetic-text flex flex-wrap justify-center overflow-visible" 
+          className="kinetic-text flex flex-col items-center overflow-visible" 
           style={{ 
             fontSize: 'clamp(2.5rem, 8vw, 12rem)', 
             margin: 0, 
-            lineHeight: 0.9, 
+            lineHeight: 1, 
             letterSpacing: '-0.04em',
             textTransform: 'uppercase',
             fontWeight: 900,
@@ -139,11 +139,20 @@ export default function Footer() {
             userSelect: 'none'
           }}
         >
-          {"Let's get to know each other".split('').map((char, i) => (
-            <span key={i} className="char relative inline-block">
-              {char === ' ' ? '\u00A0' : char}
-            </span>
-          ))}
+          <div className="flex flex-wrap justify-center">
+            {"Let's get to know".split('').map((char, i) => (
+              <span key={i} className="char relative inline-block">
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
+          </div>
+          <div className="flex flex-wrap justify-center">
+            {"each other".split('').map((char, i) => (
+              <span key={i} className="char relative inline-block">
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
+          </div>
         </h2>
       </div>
       
