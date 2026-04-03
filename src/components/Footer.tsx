@@ -233,7 +233,7 @@ export default function Footer() {
             type="submit" 
             className="morphing-submit"
             style={{
-              alignSelf: 'center',
+              alignSelf: 'flex-start',
               background: 'var(--text-primary)',
               color: 'var(--bg-pure)',
               border: 'none',
@@ -247,7 +247,7 @@ export default function Footer() {
               fontWeight: 700,
               letterSpacing: '0.15em',
               marginTop: '1.5rem',
-              transition: 'all 0.5s var(--ease-fluid)',
+              transition: 'background 0.5s var(--ease-fluid), transform 0.3s var(--ease-fluid)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -256,11 +256,16 @@ export default function Footer() {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'var(--accent-sapphire)';
-              e.currentTarget.style.transform = 'scale(1.05)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = 'var(--text-primary)';
-              e.currentTarget.style.transform = 'scale(1)';
+              gsap.to(e.currentTarget, { scale: 1, duration: 0.4, ease: 'power2.out' });
+            }}
+            onMouseDown={(e) => {
+              gsap.to(e.currentTarget, { scale: 0.94, duration: 0.15, ease: 'power2.out' });
+            }}
+            onMouseUp={(e) => {
+              gsap.to(e.currentTarget, { scale: 1, duration: 0.4, ease: 'elastic.out(1, 0.3)' });
             }}
           >
             <span style={{ 
