@@ -10,7 +10,13 @@ export default function Footer() {
   const submitBtnRef = useRef<HTMLButtonElement>(null);
   const linksRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     const ctx = gsap.context(() => {
       // 1. MAGNETIC HEADING DISTORTION
       const heading = headingRef.current;
@@ -85,7 +91,10 @@ export default function Footer() {
 
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      ctx.revert();
+    };
   }, []);
 
   const [btnText, setBtnText] = useState('SEND MESSAGE');
@@ -108,11 +117,13 @@ export default function Footer() {
       className="site-footer" 
       role="contentinfo"
       style={{
-        padding: '12vw 5%',
+        height: isMobile ? '100svh' : '100vh',
+        padding: '0 5%',
         backgroundColor: 'var(--bg-pure)',
         display: 'flex',
         flexDirection: 'column',
-        gap: '8vh',
+        justifyContent: 'center',
+        gap: isMobile ? '4vh' : '8vh',
         position: 'relative',
         zIndex: 5,
         overflow: 'hidden'
