@@ -224,21 +224,21 @@ export default function Footer() {
             type="submit" 
             className="morphing-submit"
             style={{
-              alignSelf: 'flex-start',
+              alignSelf: 'center',
               background: 'var(--text-primary)',
               color: 'var(--bg-pure)',
               border: 'none',
               borderRadius: '100px',
-              padding: '0',
-              width: '80px',
-              height: '80px',
-              fontSize: '1.1rem',
+              padding: '0 2.5rem',
+              width: '300px',
+              height: '60px',
+              fontSize: '1rem',
               cursor: 'none',
               textTransform: 'uppercase',
               fontWeight: 700,
-              letterSpacing: '0.1em',
-              marginTop: '1rem',
-              transition: 'all 0.6s var(--ease-fluid)',
+              letterSpacing: '0.15em',
+              marginTop: '1.5rem',
+              transition: 'all 0.5s var(--ease-fluid)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -246,19 +246,17 @@ export default function Footer() {
               overflow: 'hidden'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.width = '320px';
               e.currentTarget.style.background = 'var(--accent-sapphire)';
-              e.currentTarget.style.color = 'var(--bg-pure)';
+              e.currentTarget.style.transform = 'scale(1.05)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.width = '80px';
               e.currentTarget.style.background = 'var(--text-primary)';
-              e.currentTarget.style.color = 'var(--bg-pure)';
+              e.currentTarget.style.transform = 'scale(1)';
             }}
           >
             <span style={{ 
               whiteSpace: 'nowrap', 
-              opacity: 0, 
+              opacity: 1, 
               transition: 'opacity 0.3s' 
             }} 
             className="btn-text"
