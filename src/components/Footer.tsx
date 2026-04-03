@@ -152,7 +152,7 @@ export default function Footer() {
           ref={headingRef}
           className="kinetic-text flex flex-col items-center overflow-visible" 
           style={{ 
-            fontSize: isMobile ? 'clamp(2rem, 11vw, 4rem)' : 'clamp(2.5rem, 8vw, 12rem)', 
+            fontSize: isMobile ? 'clamp(1.6rem, 8.5vw, 3.5rem)' : 'clamp(2.5rem, 8vw, 12rem)', 
             margin: 0, 
             lineHeight: 1.05, 
             letterSpacing: '-0.03em',
