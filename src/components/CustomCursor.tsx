@@ -87,10 +87,10 @@ export default function CustomCursor() {
 
       gsap.to(ring, { 
         scale: 1.8, 
-        backgroundColor: '#ffffff', 
-        borderColor: 'transparent',
-        mixBlendMode: 'difference',
-        filter: 'drop-shadow(2px 0 0px rgba(255,0,0,0.8)) drop-shadow(-2px 0 0px rgba(0,255,255,0.8))',
+        backgroundColor: 'rgba(108, 188, 216, 0.15)', 
+        borderColor: 'var(--accent-sapphire)',
+        mixBlendMode: 'normal',
+        filter: 'none',
         duration: 0.5, 
         ease: 'power4.out' 
       });
